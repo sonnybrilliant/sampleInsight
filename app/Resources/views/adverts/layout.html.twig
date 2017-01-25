@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block page_header %}
+    <div class="page-head">
+        <h2>{{ page_header }}</h2>
+        <ol class="breadcrumb">
+            {% if app.user.isRadioStationCompiler or app.user.isRadioStationAdmin %}
+                <li><a href="{{ path('radio_station_profile',{slug:app.user.radioStation.slug}) }}">Home</a></li>
+            {% else %}
+                <li><a href="{{ path('dashboard_home') }}">Home</a></li>
+            {% endif %}
+            <li><a href="{{ path('advertising_organization_list') }}">Advertising organization</a></li>
+            <li class="active">{{ breadcrumb }}</li>
+        </ol>
+    </div>
+{% endblock page_header %}
+
+{% block body %}
+
+{% endblock body %}

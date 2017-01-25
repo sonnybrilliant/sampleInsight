@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SABC Music Portal">
+    <meta name="author" content="Mfana Ronald Conco">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}">
+
+    <title>{% block title %}ZA Charts{% endblock %}</title>
+    {% block stylesheets %}
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800' rel='stylesheet'
+              type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+
+        <!-- Bootstrap core CSS -->
+        <link href="{{ asset('assets/js/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
+        <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/jquery.gritter/css/jquery.gritter.css') }}"/>
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/jquery.nanoscroller/nanoscroller.css') }} "/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/bootstrap.switch/bootstrap-switch.css') }}"/>
+        <link rel="stylesheet" type="text/css"
+              href="{{ asset('assets/js/bootstrap.datetimepicker/css/bootstrap-datetimepicker.min.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/bootstrap.slider/css/slider.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/intro.js/introjs.css')}}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/jquery.niftymodals/css/component.css')}}"/>
+        <!-- Custom styles for this template -->
+        <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('assets/css/style-override1.css') }}" rel="stylesheet"/>
+    {% endblock stylesheets %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.gritter/js/jquery.gritter.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.niftymodals/js/modalEffects.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.niftymodals/js/jquery.modalEffects.js') }}"></script>
+
+</head>
+<body>
+
+<!-- Fixed navbar -->
+{% include 'menus/top.nav.menu.html.twig' %}
+<!-- Fixed navbar -->
+
+
+<div id="cl-wrapper" class="fixed-menu">
+    <!-- side nav -->
+    {% include 'menus/side.nav.menu.html.twig' %}
+    <!-- side nav -->
+
+    <div class="container-fluid" id="pcont">
+        {% block page_header %}
+            <div class="page-head">
+                <h2>List active songs</h2>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="clients.html">Songs</a></li>
+                    <li class="active">List active songs</li>
+                </ol>
+            </div>
+        {% endblock page_header %}
+        <div class="cl-mcont">
+            {% block body %}
+            {% endblock body %}
+            {#<div class="md-dialog md-effect-1" id="md-about-us">#}
+                {#<div class="md-content">#}
+                    {#hello world#}
+                {#</div>#}
+            {#</div>#}
+            <div id="md-about-us" class="md-modal colored-header danger md-effect-12">
+                <div class="md-content">
+                    <div class="modal-header"><h3>About ZACharts</h3>
+                        <button type="button" data-dismiss="modal" aria-hidden="true"
+                                class="close md-close">×
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <p>
+                                <strong>ZACharts</strong> which handles ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mollis nulla ut purus pellentesque consectetur. Pellentesque eleifend dictum egestas. Phasellus congue, lacus a tempor vulputate, velit ex sodales velit, eu lacinia nisi ligula et felis. Nullam eget erat a odio mollis bibendum a nec ex. Ut mattis neque id mi tincidunt, eu scelerisque urna bibendum. In consectetur, metus non feugiat pharetra, massa nunc ullamcorper augue, sit amet sollicitudin justo augue a elit. Vivamus interdum mattis enim non eleifend. Aenean non tristique erat, ut dignissim quam. Mauris consectetur ut lorem nec imperdiet. Integer posuere ante tortor, vel placerat diam faucibus id. Vivamus at est maximus, ullamcorper massa sit amet, vehicula sapien. Nullam iaculis metus sit amet blandit venenatis. Nam lectus purus, auctor ac risus sit amet, imperdiet commodo magna. Maecenas eget egestas diam.
+                            </p>
+                            <p>
+                                Curabitur eget consectetur magna. Pellentesque auctor sagittis diam at mollis. Mauris sit amet auctor metus. Aliquam id ipsum iaculis, volutpat odio eget, malesuada urna. Sed posuere facilisis nulla, a pretium enim. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris sed euismod dui, ut pellentesque lorem. Etiam ex ipsum, convallis et est nec, bibendum malesuada lorem. Fusce eu ultricies sapien.
+                            </p>
+                            <p>
+                                <blockquote>The Digital revolution.</blockquote>
+                            </p>
+                            <p>
+                                Nunc lobortis interdum commodo. Aenean risus nisl, sollicitudin rhoncus tincidunt non, pellentesque et nulla. Morbi non erat sed elit fringilla tempus. Etiam fermentum hendrerit nunc, a fermentum mi dictum nec. In hac habitasse platea dictumst. Maecenas diam urna, posuere et dapibus a, posuere quis ante. Praesent turpis metus, iaculis id magna eget, tempus rutrum risus. Fusce mi arcu, semper vel ante vel, dictum tincidunt lorem. Sed id ullamcorper risus, eu gravida dolor. Cras sed consequat risus. Suspendisse potenti. Nullam porttitor tortor ut purus volutpat, at posuere erat ullamcorper. In hac habitasse platea dictumst.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal"
+                                class="btn btn-default btn-flat md-close">Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="md-overlay"></div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+</div>
+{% block javascripts %}
+
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.nanoscroller/jquery.nanoscroller.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/behaviour/general.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.ui/jquery-ui.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.nestable/jquery.nestable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.switch/bootstrap-switch.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/js/skycons/skycons.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/bootstrap.slider/js/bootstrap-slider.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/intro.js/intro.js') }}" type="text/javascript"></script>
+    <script src="{{  asset('assets/js/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+    <!-- Bootstrap core JavaScript
+      ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //initialize the javascript
+            App.init({
+                nanoScroller: false
+            });
+
+            App.dashBoard();
+
+            $("#about-us-modal").on('click',function(){
+                $('#md-about-us').niftyModal();
+            });
+
+
+
+            //introJs().setOption('showBullets', false).start();
+
+        });
+    </script>
+
+{% endblock javascripts %}
+</body>
+</html>
+
+
+
+

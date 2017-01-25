@@ -1,0 +1,76 @@
+<form class="form-horizontal group-border-dashed" action="{{ path('song_add') }}" data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        <fieldset>
+            <legend><i class="fa fa-music"></i>&nbsp;Song details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.isrc) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.upc) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.album) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.genres) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.recordLabel) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.localFile) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.isCopyWritten) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-user"></i>&nbsp;Performers</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.artist) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.featuredArtist) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-crosshairs"></i>&nbsp;Target audience</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.targetedRadioStations) }}
+                </div>
+            </div>
+        </fieldset>
+        {#<fieldset>#}
+            {#<legend><i class="fa fa-info-circle-circle"></i>&nbsp;Additional data</legend>#}
+            {#<div class="row">#}
+                {#<div class="col-sm-6">#}
+                    {#{{ form_row(form.royaltyAgency) }}#}
+                {#</div>#}
+            {#</div>#}
+        {#</fieldset>#}
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="text-center">
+            <button class="btn btn-danger btn-lg" type="submit" tabindex="11"><i class="fa fa-save"></i> Add</button>
+            <a href="{{ path('song_list') }}" class="btn btn-default" tabindex="12" title="Cancel" alt="Cancel">Cancel</a>
+        </div>
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

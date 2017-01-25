@@ -1,0 +1,19 @@
+<li>
+    <a href="#"><i class="fa fa-volume-up"></i><span>Radio stations</span></a>
+    <ul class="sub-menu">
+        <li {% if action == 'radio_station_list' %} class="active" {% endif %}><a href="{{ path('radio_station_list') }}"><i class="fa fa-list"></i><span>List radio stations</span></a></li>
+        <li {% if action == 'radio_station_list_incoming_queue' %} class="active" {% endif %}><a href="{{ path('radio_station_incoming_list') }}"><i class="fa fa-database"></i><span>Incoming queue</span></a></li>
+        {% if action == 'radio_station_song_reject_view' %}
+            <li class="active"><a href="{{ path('radio_station_incoming_view',{id:radioStationQueue.id}) }}"><i class="fa fa-eye"></i><span>View rejected song</span></a></li>
+        {% endif %}
+
+        {% if action == 'radio_station_song_reject' %}
+            <li class="active"><a href="{{ path('radio_station_incoming_reject',{id:radioStationQueue.id}) }}"><i class="fa fa-ban"></i><span>Rejected song</span></a></li>
+        {% endif %}
+
+        {% if action == 'radio_station_profile' %}
+            <li class="active"><a href="{{ path('radio_station_profile',{slug:radioStation.slug}) }}"><i class="fa fa-eye"></i><span>Profile</span></a></li>
+        {% endif %}
+
+    </ul>
+</li>

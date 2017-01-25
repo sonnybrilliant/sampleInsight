@@ -1,0 +1,100 @@
+services:
+
+#Start Record label
+  app.datatable.recordlabel:
+      class: AppBundle\Datatables\RecordLabelDatatable
+      parent: sg_datatables.datatable.abstract
+  app.datatable.recordlabel.songs:
+        class: AppBundle\Datatables\RecordLabelSongDatatable
+        parent: sg_datatables.datatable.abstract
+  app.datatable.recordlabel.song.streams:
+      class: AppBundle\Datatables\RecordLabelSongStreamTransactionsDatatable
+      parent: sg_datatables.datatable.abstract
+
+#End Record label
+
+#Start Artist datatables
+  app.datatable.artist:
+      class: AppBundle\Datatables\ArtistDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.artist.song:
+      class: AppBundle\Datatables\ArtistSongDatatable
+      parent: sg_datatables.datatable.abstract
+#End Artist datatables
+
+#Radio Station
+  app.datatable.radio_station_stream:
+      class: AppBundle\Datatables\RadioStationStreamDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.radio_station_profile_stream:
+      class: AppBundle\Datatables\RadioStationProfileStreamDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.radio_station:
+      class: AppBundle\Datatables\RadioStationDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.radio_station_incoming:
+      class: AppBundle\Datatables\RadioStationQueueDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.radio_station_archives:
+      class: AppBundle\Datatables\RadioStationArchivesDatatable
+      parent: sg_datatables.datatable.abstract
+#Radio Station
+
+  app.datatable.song:
+      class: AppBundle\Datatables\SongDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.royalty_agency:
+      class: AppBundle\Datatables\RoyaltyAgencyDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.advertising_organization:
+      class: AppBundle\Datatables\AdvertisingOrganizationDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.compiler:
+      class: AppBundle\Datatables\CompilerDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.song_stream_transaction:
+      class: AppBundle\Datatables\SongStreamTransactionsDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.artist_song_stream_transaction:
+      class: AppBundle\Datatables\ArtistSongStreamTransactionsDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.advert:
+      class: AppBundle\Datatables\AdvertDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.slogan:
+      class: AppBundle\Datatables\SloganDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.promo_list:
+      class: AppBundle\Datatables\PromoDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.promo_stream:
+      class: AppBundle\Datatables\PromoMonitoredDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.advert_stream:
+      class: AppBundle\Datatables\AdvertMonitoredDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.slogan_stream:
+      class: AppBundle\Datatables\SloganMonitoredDatatable
+      parent: sg_datatables.datatable.abstract
+
+  app.datatable.radio_show:
+      class: AppBundle\Datatables\RadioShowDatatable
+      parent: sg_datatables.datatable.abstract
+
+

@@ -1,0 +1,100 @@
+<div id="head-nav" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="fa fa-user"></span>
+            </button>
+            <a class="navbar-brand" href="#"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+
+            <ul class="nav navbar-nav">
+                {% if app.user.isRadioStationCompiler or app.user.isRadioStationAdmin %}
+                    <li><a href="{{ path('radio_station_profile',{slug:app.user.radioStation.slug}) }}">Home</a></li>
+                {% else %}
+                    <li><a href="{{ path('dashboard_home') }}">Home</a></li>
+                {% endif %}
+                <li><a href="#about" id="about-us-modal" class="md-trigger" data-modal="md-about-us">About</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Quick links <b class="caret"></b></a>
+                    <ul class="dropdown-menu col-menu-2">
+                        <li class="col-sm-6 no-padding">
+                            <ul>
+                                {% if is_granted('ROLE_RECORD_LABEL_EDIT') or is_granted('ROLE_RECORD_LABEL_EDIT') or is_granted('ROLE_SONG_EDIT') or is_granted('ROLE_RADIO_STATION_ADMINISTRATOR') %}
+                                    <li class="dropdown-header"><i class="fa fa-plus-circle"></i>Add</li>
+                                    {% if is_granted('ROLE_RECORD_LABEL_EDIT') %}
+                                    <li><a href="{{ path('record_label_create') }}" title="Add record label"><i class="fa fa-building-o"></i>&nbsp; Record label</a></li>
+                                    {% endif %}
+
+                                    {% if is_granted('ROLE_RECORD_LABEL_EDIT') %}
+                                    <li><a href="{{ path('artist_add') }}" title="Add artists"><i class="fa fa-microphone"></i>&nbsp;Artist</a></li>
+                                    {% endif %}
+
+                                    {% if is_granted('ROLE_SONG_EDIT') %}
+                                    <li><a href="{{ path('song_add') }}" title="Add song"><i class="fa fa-music"></i>&nbsp;Song</a></li>
+                                    {% endif %}
+
+                                    {% if is_granted('ROLE_RADIO_STATION_ADMINISTRATOR') %}
+                                    <li><a href="{{ path('compiler_add') }}" title="Add radio station compiler"><i class="fa fa-user"></i>&nbsp;Radio station compiler</a></li>
+                                    {% endif %}
+
+                                {% endif %}
+                                <li class="dropdown-header"><i class="fa fa-list-alt"></i>View</li>
+                                <li><a href="{{ path('monitor_list') }}" title="View live monitoring"><i class="fa fa-desktop"></i>&nbsp;Live monitoring stream</a></li>
+                                <li><a href="{{ path('radio_station_list') }}" title="View radio stations"><i class="fa fa-volume-up"></i>&nbsp;Radio stations</a></li>
+                                <li><a href="{{ path('record_label_list') }}" title="View record labels"><i class="fa fa-building-o"></i>&nbsp;Record label</a></li>
+                                <li><a href="{{ path('royalty_agency_list') }}" title="View royalty agencies"><i class="fa fa-money"></i>&nbsp;Royalty agency</a></li>
+                                <li><a href="{{ path('artist_list') }}" title="View artists"><i class="fa fa-microphone"></i>&nbsp;Artists</a></li>
+                                <li><a href="{{ path('song_list') }}" title="View songs"><i class="fa fa-music"></i>&nbsp;Songs</a></li>
+                            </ul>
+                        </li>
+                        <li class="col-sm-6 no-padding">
+                            <ul>
+                                <li class="dropdown-header"><i class="fa fa-gear"></i>Config</li>
+                                <li><a href="#">Settings</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+            <ul class="nav navbar-nav navbar-right user-nav">
+                <li class="dropdown profile_menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span>Welcome {{ app.user.fullName }}</span>
+                        <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {#<li><a href="#">My Account</a></li>#}
+                        <li><a href="{{ path('user_profile',{slug:app.user.slug}) }}"><i class="fa fa-user"></i>&nbsp;Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ path('security_logout') }}"><i class="fa fa-sign-out"></i>&nbsp;Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right not-nav">
+
+                <li class="button dropdown">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i
+                                class="fa fa-globe"></i><span class="bubble">1</span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="nano nscroller">
+                                <div class="content">
+                                    <ul>
+                                        <li><a href="#"><i class="fa fa-cloud-upload info"></i><b>Daniel</b> uploaded a song <span class="date">2 minutes ago.</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <ul class="foot">
+                                <li><a href="#">View all activity </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div><!--/.nav-collapse animate-collapse -->
+    </div>
+</div>

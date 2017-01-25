@@ -1,0 +1,24 @@
+{% if is_granted('ROLE_ARTIST_VIEW') %}
+    <li>
+        <a href="#"><i class="fa fa-user"></i><span>Artists</span></a>
+        <ul class="sub-menu" {% if action == 'artist_profile' or action == 'artist_edit' %} style="display: block;"{% endif %}>
+            {% if is_granted('ROLE_ARTIST_EDIT') %}
+                <li {% if action == 'artist_add' %} class="active" {% endif %}><a href="{{ path('artist_add') }}"><i
+                                class="fa fa-user-plus"></i><span>Add artist</span></a></li>
+            {% endif %}
+
+            {% if is_granted('ROLE_ARTIST_VIEW') %}
+                <li {% if action == 'artist_list' %} class="active" {% endif %}><a href="{{ path('artist_list') }}"><i
+                                class="fa fa-list"></i><span>List artists</span></a></li>
+            {% endif %}
+
+            {% if action == 'artist_profile' %}
+                <li class="active"><a href="{{ path('artist_profile',{slug:artist.slug}) }}"><i class="fa fa-eye"></i><span>Profile</span></a></li>
+            {% endif %}
+
+            {% if action == 'artist_edit' %}
+                <li class="active"><a href="{{ path('artist_edit',{slug:artist.slug}) }}"><i class="fa fa-edit"></i><span>Edit</span></a></li>
+            {% endif %}
+        </ul>
+    </li>
+{% endif %}

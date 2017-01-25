@@ -1,0 +1,100 @@
+services:
+  #Form Handlers
+  # - User - compiler
+  app.handler_form.compiler_create:
+      class: AppBundle\Handler\Form\Compiler\CompilerCreateHandler
+      arguments: ['@app.user.compiler_service', '@app.alert.service', '@logger','@app.core.user_group_service','@event_dispatcher']
+
+  # - Record label
+  app.handler_form.record_label_create:
+      class: AppBundle\Handler\Form\RecordLabel\RecordLabelCreateHandler
+      arguments: ['@app.service.record_label', '@app.alert.service', '@logger']
+
+  app.handler_form.record_label_edit:
+      class: AppBundle\Handler\Form\RecordLabel\RecordLabelEditHandler
+      arguments: ['@app.service.record_label', '@app.alert.service', '@logger','@app.core.status_service','@event_dispatcher']
+
+  #Radio station
+  app.handler_api.radio_station_stream_create:
+      class: AppBundle\Handler\RadioStation\RadioStationStreamCreateHandler
+      arguments: ['@logger','@app.service.radio_station_stream','@app.service.radio_station','@app.core.content_type_service']
+
+  app.handler_api.radio_station_incoming_queue_create_handler:
+      class: AppBundle\Handler\RadioStation\RadioStationIncomingQueueCreateHandler
+      arguments: ['@app.service.radio_station_incoming_queue','@event_dispatcher','@app.core.status_service']
+
+  app.handler_api.radio_station_incoming_queue_approve_handler:
+      class: AppBundle\Handler\RadioStation\RadioStationIncomingQueueApproveHandler
+      arguments: ['@app.service.radio_station_incoming_queue','@event_dispatcher','@app.core.status_service']
+
+  app.handler_api.radio_station_incoming_queue_reject_handler:
+      class: AppBundle\Handler\RadioStation\RadioStationIncomingQueueRejectHandler
+      arguments: ['@app.service.radio_station_incoming_queue','@event_dispatcher','@app.core.status_service']
+
+  # Radio show
+  app.handler_form.radio_show_type_create:
+      class: AppBundle\Handler\Form\RadioShow\RadioShowTypeCreateHandler
+      arguments: ['@app.service.radio_show_type', '@app.alert.service', '@logger']
+
+  app.handler_form.radio_show_create:
+      class: AppBundle\Handler\Form\RadioShow\RadioShowCreateHandler
+      arguments: ['@app.service.radio_show', '@app.alert.service', '@logger']
+
+  app.handler_form.radio_show_edit:
+      class: AppBundle\Handler\Form\RadioShow\RadioShowCreateHandler
+      arguments: ['@app.service.radio_show', '@app.alert.service', '@logger']
+
+  app.handler.radio_show_time_slot_create:
+      class: AppBundle\Handler\RadioShowTimeSlot\RadioShowTimeSlotCreateHandler
+      arguments: ['@logger', '@app.service.radio_show_time_slot']
+
+  # - Artist
+  app.form.artist.file.uploader:
+      class: AppBundle\Service\Artist\ArtistFileUploaderService
+      arguments: ['%artist_profile_directory%']
+
+  app.handler_form.artist_create:
+      class: AppBundle\Handler\Form\Artist\ArtistCreateHandler
+      arguments: ['@app.service.artist', '@app.alert.service', '@logger','@app.form.artist.file.uploader']
+
+  app.handler_form.artist_edit:
+      class: AppBundle\Handler\Form\Artist\ArtistEditHandler
+      arguments: ['@app.service.artist', '@app.alert.service', '@logger','@app.core.status_service','@event_dispatcher','@app.form.artist.file.uploader']
+
+  # - Song
+  app.form.song.file.uploader:
+      class: AppBundle\Service\Song\SongFileUploaderService
+      arguments: ['%song_original_directory%']
+
+  app.handler_form.song_create:
+      class: AppBundle\Handler\Form\Song\SongCreateHandler
+      arguments: ['@app.service.song', '@app.alert.service', '@logger','@app.form.song.file.uploader','@event_dispatcher']
+
+  # - Advertising Organization
+  app.handler_form.advertising_organization_create:
+      class: AppBundle\Handler\Form\AdvertisingOrganization\AdvertisingOrganizationCreateHandler
+      arguments: ['@app.service.advertising_organization', '@app.alert.service', '@logger']
+
+  app.handler_form.advertising_organization_edit:
+      class: AppBundle\Handler\Form\AdvertisingOrganization\AdvertisingOrganizationEditHandler
+      arguments: ['@app.service.advertising_organization', '@app.alert.service', '@logger']
+
+  # - Advert
+  app.handler_form.advert_create:
+      class: AppBundle\Handler\Form\Advert\AdvertCreateHandler
+      arguments: ['@app.service.advert', '@app.alert.service', '@logger','@app.form.advert.file.uploader','@app.core.audio.editor.service','@app.core.api.apostle']
+
+  # - Slogan
+  app.handler_form.slogan_create:
+      class: AppBundle\Handler\Form\Slogan\SloganCreateHandler
+      arguments: ['@app.service.slogan', '@app.alert.service', '@logger','@app.form.slogan.file.uploader','@app.core.audio.editor.service','@app.core.api.apostle']
+
+  # - Promo
+  app.handler_form.promo_create:
+      class: AppBundle\Handler\Form\Promo\PromoCreateHandler
+      arguments: ['@app.service.promo', '@app.alert.service', '@logger','@app.form.promo.file.uploader','@app.core.audio.editor.service','@app.core.api.apostle']
+
+  # - Archive
+  app.handler_form.archive_create:
+      class: AppBundle\Handler\Form\Archive\ArchiveCreateHandler
+      arguments: ['@app.service.archive','@app.service.radio_station','@app.service.radio_show','@logger','@app.core.audio.editor.service','@app.core.api.apostle','%recordings_original_directory%']

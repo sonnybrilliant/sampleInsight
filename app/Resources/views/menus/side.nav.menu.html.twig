@@ -1,0 +1,91 @@
+<div class="cl-sidebar" data-position="right" data-step="1"
+     data-intro="<strong>Fixed Sidebar</strong> <br/> It adjust to your needs.">
+    <div class="cl-toggle"><i class="fa fa-bars"></i></div>
+    <div class="cl-navblock">
+        <div class="menu-space">
+            <div class="content">
+                {#<div class="side-user">#}
+                    {#<div class="info">#}
+                        {#<p>Total playlisted songs: 1 / 10<a href="#"><i class="fa fa-plus"></i></a></p>#}
+                        {#<div class="progress progress-user">#}
+                            {#<div style="width: 1%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40"#}
+                                 {#role="progressbar" class="progress-bar progress-bar-info">#}
+                                {#<span class="sr-only">50% Complete (success)</span>#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                <ul class="cl-vnavigation">
+                    <!-- dashboard -->
+                    {% include 'menus/side_nav/dashboard.nav.html.twig' %}
+                    <!-- dashboard -->
+
+                    <!-- monitoring -->
+                    {% include 'menus/side_nav/monitoring.nav.html.twig' %}
+                    <!-- monitoring -->
+
+                    <!-- record label -->
+                    {% include 'menus/side_nav/recordlabel.nav.html.twig' %}
+                    <!-- record label -->
+
+                    <!-- artists -->
+                    {% include 'menus/side_nav/artists.nav.html.twig' %}
+                    <!-- artists -->
+
+                    <!-- songs -->
+                    {% include 'menus/side_nav/songs.nav.html.twig' %}
+                    <!-- songs -->
+
+                    <!-- advertisement organization-->
+                    {% include 'menus/side_nav/advertising.org.nav.html.twig' %}
+                    <!-- advertisement organization -->
+
+                    <!-- adverts -->
+                    {% include 'menus/side_nav/advertising.adverts.nav.html.twig' %}
+                    <!-- adverts  -->
+
+                    <!-- adverts -->
+                    {% include 'menus/side_nav/slogans.nav.html.twig' %}
+                    <!-- adverts  -->
+
+                    <!-- adverts -->
+                    {% include 'menus/side_nav/promos.nav.html.twig' %}
+                    <!-- adverts  -->
+
+                    <!-- radio -->
+                    {% include 'menus/side_nav/radio.nav.html.twig' %}
+                    <!-- radio -->
+
+                    <!-- radio shows-->
+                    {% include 'menus/side_nav/radio.show.nav.html.twig' %}
+                    <!-- radio shows-->
+
+                    <!-- royalty -->
+                    {% include 'menus/side_nav/royalty.nav.html.twig' %}
+                    <!-- royalty -->
+
+                    <!-- reports -->
+                    {% include 'menus/side_nav/compiler.nav.html.twig' %}
+                    <!-- reports -->
+
+                    {#<!-- reports -->#}
+                    {#{% include 'menus/side_nav/reports.nav.html.twig' %}#}
+                    {#<!-- reports -->#}
+
+                    {#<!-- users -->#}
+                    {#{% include 'menus/side_nav/users.nav.html.twig' %}#}
+                    {#<!-- users -->#}
+
+                    {#<!-- settings -->#}
+                    {#{% include 'menus/side_nav/settings.nav.html.twig' %}#}
+                    {#<!-- settings -->#}
+                </ul>
+            </div>
+        </div>
+        <div class="text-right collapse-button" style="padding:7px 9px;">
+            <button id="sidebar-collapse" class="btn btn-default" style="">
+                <i style="color:#fff;" class="fa fa-angle-left"></i>
+            </button>
+        </div>
+    </div>
+</div>

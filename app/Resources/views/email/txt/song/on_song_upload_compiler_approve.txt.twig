@@ -1,0 +1,13 @@
+{% extends "::base.mail.html.twig" %}
+{% block body %}
+    Dear {{ fullName }},
+
+   A new song has been added, you are getting this email because you have been granted the "Compiler" status by { radio }}.<br />
+
+    Song details:
+    Title: {{ title }}
+    Artist: {{ artist }}
+
+    Please follow the link below to listen to the song.
+    {{ url }}
+{% endblock %}

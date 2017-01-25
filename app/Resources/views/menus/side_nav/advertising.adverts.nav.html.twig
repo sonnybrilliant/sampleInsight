@@ -1,0 +1,19 @@
+{% if is_granted('ROLE_ADVERT_VIEW') %}
+    <li>
+        <a href="#"><i class="fa fa-money"></i><span>Adverts</span></a>
+        <ul class="sub-menu" {% if action == 'advert_add' or action == 'advert_list' %} style="display: block;"{% endif %}>
+            {% if is_granted('ROLE_ADVERT_EDIT') %}
+                <li {% if action == 'advert_add' %}class="active" {% endif %}><a href="{{ path('advert_add') }}"><i class="fa fa-plus-circle"></i><span>Add advert</span></a></li>
+            {% endif %}
+
+            {% if is_granted('ROLE_ADVERT_VIEW') %}
+                <li {% if action == 'advert_list' %} class="active" {% endif %}><a href="{{ path('advert_list') }}"><i class="fa fa-list"></i><span>List adverts</span></a></li>
+            {% endif %}
+
+            {% if action == 'advert_profile' %}
+                <li class="active"><a href="{{ path('advert_profile',{ slug: advert.slug}) }}"><i class="fa fa-eye"></i><span>Advert profile</span></a></li>
+            {% endif %}
+
+        </ul>
+    </li>
+{% endif %}

@@ -1,0 +1,18 @@
+{% if is_granted('ROLE_COMPILER_VIEW') %}
+<li {% if action == 'compiler_profile' or action == 'compiler_edit' %} class="active" {% endif %}>
+    <a href="#"><i class="fa fa-headphones"></i><span>Compilers</span></a>
+    <ul class="sub-menu" {% if action == 'compiler_profile' or action == 'compiler_edit' %} style="display: block;"{% endif %}>
+        {% if is_granted('ROLE_COMPILER_EDIT') %}
+        <li {% if action == 'compiler_add' %} class="active" {% endif %}><a href="{{ path('compiler_add') }}"><i class="fa fa-user-plus"></i><span>Add compiler</span></a></li>
+        {% endif %}
+
+        {% if is_granted('ROLE_COMPILER_VIEW') %}
+            <li {% if action == 'compiler_list' %} class="active" {% endif %}><a href="{{ path('compiler_list') }}"><i class="fa fa-list"></i><span>List compilers</span></a></li>
+        {% endif %}
+
+        {% if action == 'user_profile' and user.isRadioStationCompiler == true %}
+            <li class="active"><a href="{{ path('user_profile',{slug:user.slug}) }}"><i class="fa fa-user"></i><span>Profile</span></a></li>
+        {% endif %}
+    </ul>
+</li>
+{% endif %}

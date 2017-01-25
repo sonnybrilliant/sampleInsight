@@ -1,0 +1,376 @@
+{% extends ':artist:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
+{% endblock stylesheets %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block alert %}
+                {% include "::alert.html.twig" %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-12">
+            <div class="block-flat profile-info">
+
+                <div class="hero-md">
+                    <div class="hero-artist-image">
+                        <div class="hero-data">
+                                   <span class="hero-icon">
+                                       <img src="{{ asset('assets/images/icon-sets/artist-page-icon.png') }}" alt="">
+                                    </span>
+                            <span class="hero-meta text-center">
+                                      <h2 class="meta-title">{{ artist.title }}</h2>
+                                       {#<strong>Label:</strong>&nbsp;&nbsp;{{ artist.recordLabel.name }}#}
+                                      <strong>Genres:</strong>&nbsp;&nbsp;
+
+                                {% for genre in artist.genres %}
+                                    {{ genre.title }}
+                                    {% if artist.genres|length > 1 %}
+                                        {% if loop.index0 < (artist.genres|length - 1)  %}
+                                        ,
+                                        {% endif %}
+                                    {% endif %}
+
+                                {% endfor %}
+                                {% if artist.website %}
+                                | <strong>Website:</strong>&nbsp;&nbsp;{{ artist.website }}
+                                {% endif %}
+                                   </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-container m-t">
+                <ul class="nav nav-tabs styled-tabs">
+                    <li><a data-toggle="tab" href="#info"><i class="fa fa-info-circle"></i>&nbsp;Information</a></li>
+                    <li><a data-toggle="tab" href="#songs"><i class="fa fa-music"></i>&nbsp;Songs</a></li>
+                    <li {% if isDefaultView %} class="active" {% endif %}><a data-toggle="tab" href="#transaction"><i class="fa fa-calendar"></i>&nbsp;Played At</a></li>
+                    <li {% if isDefaultView == false  %} class="active" {% endif %}><a data-toggle="tab" href="#stats"><i class="fa fa-pie-chart"></i>&nbsp;
+                            {% if statsRange == 'this-week' %}
+                                Week (#{{ "now"|date("W") }}) plays
+                            {% elseif statsRange == 'last-week' %}
+                                Last week (#{{ "now"|date_modify("-1 week") |date("W") }}) plays
+                            {% elseif statsRange == 'current-month' %}
+                                Month (#{{ "now"|date("F") }}) plays
+                            {% elseif statsRange == 'last-month' %}
+                                Last month (#{{ "now"|date_modify("-1 month") |date("F") }}) plays
+                            {% elseif statsRange == 'historical' %}
+                                Historical plays
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="info" class="tab-pane cont">
+
+                        <div class="content">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="avatar text-center">
+                                        {% if artist.artistImage != '' %}
+                                            <img src="{{ asset('uploads/artist/' ~ artist.artistImage) }}"  class="profile-avatar thumbnail" title="{{ artist.title }}">
+                                        {% else %}
+                                            <img src="{{ artist.apiDeezerImage500x500 }}"  class="profile-avatar thumbnail" title="{{ artist.title }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="page-header">
+                                        <h3>{{ artist.title }}
+                                            {% if is_granted('ROLE_ARTIST_EDIT') %}
+                                               <a href="{{ path('artist_edit', {slug:artist.slug}) }}" title="Edit artist" class="btn btn-primary btn-sm btn-rad pull-right"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                                            {% endif %}
+                                        </h3>
+                                    </div>
+                                    <div class="content">
+                                        <table class="no-border no-strip skills">
+                                            <tbody class="no-border-x no-border-y">
+                                                <tr>
+                                                    <td style="width:20%;"><strong>Is a Group/Band/Collaboration ?</strong><span data-toggle="tooltip" data-container="body" data-placement="top" title="" data-original-title="Is {{ artist.isBand }} a band or Solo act?"><i class="fa fa-question-circle"></i></span></td>
+                                                    <td>{% if artist.isBand %} <span class="label label-primary">YES</span> {% else %} <span class="label label-warning">NO</span> {% endif %}</td>
+                                                </tr>
+
+
+                                            {% if artist.fullName %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Full name</strong></td>
+                                                    <td>{{ artist.fullName }}</td>
+                                                </tr>
+                                            {% endif %}
+
+                                            {% if artist.gender %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Gender</strong></td>
+                                                    <td>{{ artist.gender.title }}</td>
+                                                </tr>
+                                            {% endif %}
+
+                                            {% if artist.website %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Website</strong></td>
+                                                    <td><a href="{{ artist.website }}" alt="View"
+                                                           title="View">{{ artist.website }}</a></td>
+                                                </tr>
+                                            {% endif %}
+
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Is local?</strong><span data-toggle="tooltip" data-container="body" data-placement="top" title="" data-original-title="Is {{ artist.title }} a South African Artist?"><i class="fa fa-question-circle"></i></span></td>
+                                                    <td>{% if artist.isLocal %} <span class="label label-primary">YES</span> {% else %} <span class="label label-warning">NO</span> {% endif %}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Is African?</strong><span data-toggle="tooltip" data-container="body" data-placement="top" title="" data-original-title="Is {{ artist.title }} an African Artist?"><i class="fa fa-question-circle"></i></span></td>
+                                                    <td>{% if artist.isAfrican %} <span class="label label-primary">YES</span> {% else %} <span class="label label-warning">NO</span> {% endif %}</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <div class="content">
+                                            {% if artist.facebook %}<a href="{{ artist.facebook }}"
+                                                                            class="btn btn-default btn-facebook bg"><i
+                                                        class="fa fa-facebook"></i></a>{% endif %}
+                                            {% if artist.twitter %}<a href="{{ artist.twitter }}"
+                                                                           class="btn btn-default btn-twitter bg"><i
+                                                        class="fa fa-twitter"></i></a>{% endif %}
+                                        </div>
+                                        <br />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {% if artist.bio %}
+                                        <div class="block widget-notes">
+                                            <div class="header dark"><h4>Notes about {{ artist.title }}</h4></div>
+                                            <div class="content">
+                                                <div contenteditable="true" class="paper">{{ artist.bio| raw }}</div>
+                                                <div class="paper">Source: {{ artist.bioSource }}</div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- songs start -->
+                    <div id="songs" class="tab-pane cont">
+                        {% if is_granted('ROLE_SONG_EDIT') %}
+                            <a href="{{ path('song_add') }}" title="Add song" class="btn btn-primary btn-sm btn-rad pull-right"><i class="fa fa-plus-circle"></i>&nbsp;Add song</a>
+                            <br /><br />
+                        {% endif %}
+                        <div class="content">
+                            {{ datatable_render(songDatatable) }}
+                        </div>
+                    </div>
+                    <div id="transaction" class="tab-pane  {% if isDefaultView == true  %} active {% endif %} cont">
+                        <div class="content">
+                            <h3>Transaction logs <i class="fa fa-info-circle-circle" data-placement="right" data-toggle="tooltip" data-original-title="These are the transaction logs of the songs monitored whilst playing on radio."></i></h3>
+                            <small>Total: {{ totalPlays }} </small>
+                            <br /><br />
+                            {{ datatable_render(artistDatatable) }}
+                        </div>
+                    </div>
+                    <div id="stats" class="tab-pane  {% if isDefaultView == false  %} active {% endif %} cont">
+                        {% if statsRange == 'this-week' %}
+                            <h3>Radio station plays week (#{{ "now"|date("W") }})</h3>
+                        {% elseif statsRange == 'last-week' %}
+                            <h3>Radio station plays last week (#{{ "now"|date_modify("-1 week") |date("W") }}) </h3>
+                        {% elseif statsRange == 'current-month' %}
+                            <h3>Radio station plays current month (#{{ "now"|date("F") }})</h3>
+                        {% elseif statsRange == 'last-month' %}
+                            <h3>Radio station plays last month (#{{ "now"|date_modify("-1 month") |date("F") }})</h3>
+                        {% elseif statsRange == 'historical' %}
+                            <h3>Radio station plays historical</h3>
+                        {% endif %}
+                        <small>Total: {{ totalPlaysBy }} </small>
+
+                        <div class="btn-group pull-right">
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle" aria-expanded="false">More stats.. <span class="caret"></span></button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="{{ path('artist_profile',{slug:artist.slug,range:'this-week'}) }}">Current week</a></li>
+                                <li><a href="{{ path('artist_profile',{slug:artist.slug,range:'last-week'}) }}">Last week</a></li>
+                                <li><a href="{{ path('artist_profile',{slug:artist.slug,range:'current-month'}) }}">Current month</a></li>
+                                <li><a href="{{ path('artist_profile',{slug:artist.slug,range:'last-month'}) }}">Last month</a></li>
+                                <li><a href="{{ path('artist_profile',{slug:artist.slug,range:'historical'}) }}">Historical</a></li>
+                            </ul>
+                        </div>
+                        <br /><br />
+                        {% if echartsData %}
+                            <div id="platform_type_dates" style="height: 600px;width:800px"></div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button><i class="fa fa-warning sign"></i><strong>Warning!</strong> No data available.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if echartsData %}
+    <script src="{{ asset('assets/js/echarts-all.js') }}"></script>
+    {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.js"></script>
+    <script src="{{ asset('assets/js/jquery.highlight.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+    <script type="text/javascript">
+
+        {% if echartsData %}
+
+        {% if statsRange == 'this-week' %}
+        {% set data_option_name = "now"|date("W")  %}
+        {% set name_period = "Week"  %}
+        {% elseif statsRange == 'last-week' %}
+        {% set data_option_name = "now"|date_modify("-1 week") |date("W")  %}
+        {% set name_period = "Week"  %}
+        {% elseif statsRange == 'current-month' %}
+        {% set data_option_name = "now"|date("F")  %}
+        {% set name_period = "Month"  %}
+        {% elseif statsRange == 'last-month' %}
+        {% set data_option_name = "now"|date_modify("-1 month") |date("F")  %}
+        {% set name_period = "Month"  %}
+        {% elseif statsRange == 'historical' %}
+        {% set data_option_name = "historical"  %}
+        {% set name_period = "Historical"  %}
+        {% endif %}
+
+        var myChart = echarts.init(document.getElementById('platform_type_dates'),"macarons2");
+        myChart.setOption({
+            calculable: true,
+            timeline : {
+                show: false,
+                data : ['{{ data_option_name }}'],
+                label : {
+                    formatter : function(s) {
+                        return s.slice(0, 5);
+                    }
+                },
+                x:10,
+                y:null,
+                x2:10,
+                y2:0,
+                width:250,
+                height:50,
+                backgroundColor:"rgba(0,0,0,0)",
+                borderColor:"#eaeaea",
+                borderWidth:0,
+                padding:5,
+                controlPosition:"left",
+                autoPlay:false,
+                loop:true,
+                playInterval:2000,
+                lineStyle:{
+                    width:1,
+                    color:"#bdbdbd",
+                    type:""
+                },
+
+            },
+            options : [
+                {
+                    title : {
+                        text: '',
+                        subtext: '',
+                        //x: 'center',
+
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "Song: {b} <br/>{{ name_period }}: {a} <br/> Playlisted: {c} <br/> Perc: ({d}%)"
+                    },
+                    legend: {
+                        show: true,
+                        x: 'left',
+                        orient:'vertical',
+                        padding: 0,
+                        data:{{ echartsData["labels"]|json_encode| raw }}
+                    },
+                    toolbox: {
+                        show : true,
+                        color : ['#bdbdbd','#bdbdbd','#bdbdbd','#bdbdbd'],
+                        showTitle:true,
+                        feature : {
+                            mark : {show: false},
+                            dataView : {show: false, readOnly: true},
+                            magicType : {
+                                show: true,
+                                type: ['pie', 'funnel'],
+                                title: {
+                                    pie: 'Pie Chart',
+                                    funnel: 'Funnel'
+                                },
+                                option: {
+                                    funnel: {
+                                        x: '10%',
+                                        width: '80%',
+                                        funnelAlign: 'center',
+                                        max: 50
+                                    },
+                                    pie: {
+                                        roseType : 'radius',
+                                    }
+                                }
+                            },
+                            restore : {
+                                show: true,
+                                title: 'Restore'
+                            },
+                            saveAsImage : {
+                                show: true,
+                                title : 'Save As',
+                            }
+                        }
+                    },
+
+
+                    series : [
+                        {
+                            name:'{{ data_option_name }}',
+                            type:'pie',
+                            radius : [10, '60%'],
+                            roseType : 'radius',
+                            center: ['50%', '45%'],
+                            width: '50%',       // for funnel
+                            itemStyle : {
+                                normal : {
+                                    label : { show : true },
+                                    labelLine : { show : true },
+                                    borderColor:"rgba(0,0,0,0)",
+                                    borderWidth:10,
+                                },
+                                emphasis : { label : { show : false }, labelLine : {show : false} }
+                            },
+                            data:{{ echartsData["data"]|json_encode| raw }}
+                        }
+                    ]
+                }
+            ] // end options object
+
+        });
+
+        myChart.setTheme("infographic");
+        {% endif %}
+    </script>
+{% endblock javascripts %}

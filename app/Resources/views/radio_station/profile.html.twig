@@ -1,0 +1,376 @@
+{% extends ':radio_station:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/echarts-all.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.js"></script>
+    <script src="{{ asset('assets/js/jquery.highlight.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    App.dataTables();
+
+    <script type="text/javascript">
+        {% if echartsData %}
+        var myChart = echarts.init(document.getElementById('platform_type_dates'),"macarons2");
+        myChart.setOption({
+            calculable: true,
+            timeline : {
+                show: false,
+                data : ['{{ "now" | date('W') }}'],
+                label : {
+                    formatter : function(s) {
+                        return s.slice(0, 5);
+                    }
+                },
+                x:10,
+                y:null,
+                x2:10,
+                y2:0,
+                width:250,
+                height:50,
+                backgroundColor:"rgba(0,0,0,0)",
+                borderColor:"#eaeaea",
+                borderWidth:0,
+                padding:5,
+                controlPosition:"left",
+                autoPlay:false,
+                loop:true,
+                playInterval:2000,
+                lineStyle:{
+                    width:1,
+                    color:"#bdbdbd",
+                    type:""
+                },
+
+            },
+            options : [
+                {
+//                color: ['#ed9678','#e7dac9','#cb8e85','#f3f39d','#c8e49c',
+//                    '#f16d7a','#f3d999','#d3758f','#dcc392','#2e4783',
+//                    '#82b6e9','#ff6347','#a092f1','#0a915d','#eaf889',
+//                    '#6699FF','#ff6666','#3cb371','#d5b158','#38b6b6'],
+                    //color: ['#3F51B5','#303F9F','#1A237E','#9FA8DA','#7986CB','#C5CAE9'],
+                    title : {
+                        text: '',
+                        subtext: '',
+                        //x: 'center',
+
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "Artist: {b} <br/>Week: {a} <br/> Playlisted: {c} <br/> Perc: ({d}%)"
+                    },
+                    legend: {
+                        show: true,
+                        x: 'left',
+                        orient:'vertical',
+                        padding: 0,
+                        data:{{ echartsData["labels"]|json_encode| raw }}
+                    },
+                    toolbox: {
+                        show : true,
+                        color : ['#bdbdbd','#bdbdbd','#bdbdbd','#bdbdbd'],
+                        showTitle:true,
+                        feature : {
+                            mark : {show: false},
+                            dataView : {show: false, readOnly: true},
+                            magicType : {
+                                show: true,
+                                type: ['pie', 'funnel'],
+                                title: {
+                                    pie: 'Pie Chart',
+                                    funnel: 'Funnel'
+                                },
+                                option: {
+                                    funnel: {
+                                        x: '10%',
+                                        width: '80%',
+                                        funnelAlign: 'center',
+                                        max: 50
+                                    },
+                                    pie: {
+                                        roseType : 'radius',
+                                    }
+                                }
+                            },
+                            restore : {
+                                show: true,
+                                title: 'Restore'
+                            },
+                            saveAsImage : {
+                                show: true,
+                                title : 'Save As',
+                            }
+                        }
+                    },
+
+
+                    series : [
+                        {
+                            name:'{{ "now"| date("W") }}',
+                            type:'pie',
+                            radius : [10, '60%'],
+                            roseType : 'radius',
+                            center: ['50%', '45%'],
+                            width: '50%',       // for funnel
+                            itemStyle : {
+                                normal : {
+                                    label : { show : true },
+                                    labelLine : { show : true },
+                                    borderColor:"rgba(0,0,0,0)",
+                                    borderWidth:10,
+                                },
+                                emphasis : { label : { show : false }, labelLine : {show : false} }
+                            },
+                            data:{{ echartsData["data"]|json_encode| raw }}
+                        }
+                    ]
+                }
+            ] // end options object
+
+        });
+
+        myChart.setTheme("infographic");
+        {% endif %}
+    </script>
+
+{% endblock javascripts %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block alert %}
+                {% include "::alert.html.twig" %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-12">
+            <div class="block-flat profile-info">
+
+                <div class="hero-md">
+                    <div class="hero-label-image">
+                        <div class="hero-data">
+                                   <span class="hero-icon">
+                                       <img src="{{ asset('assets/images/radiostations/' ~ radioStation.logo) }}"
+                                            alt="">
+                                    </span>
+                            <span class="hero-meta text-center">
+                                      <h2 class="meta-title">{{ radioStation.name }}</h2>
+                                       <strong>Frequency:</strong>&nbsp;&nbsp;{{ radioStation.frequency }} | <strong>Contact No:</strong>&nbsp;&nbsp;{{ radioStation.contactNumber }}
+                                | <strong>Email:</strong>&nbsp;&nbsp;{{ radioStation.contactEmail }}
+                                   </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-container m-t">
+                <ul class="nav nav-tabs styled-tabs">
+                    <li><a data-toggle="tab" href="#home"><i class="fa fa-info-circle"></i>&nbsp;Information</a></li>
+                    <li class="active"><a data-toggle="tab" href="#monitor"><i class="fa fa-desktop"></i>&nbsp;Monitored</a></li>
+                    <li><a data-toggle="tab" href="#charts"><i class="fa fa-line-chart"></i>&nbsp;Top 10 Songs</a></li>
+                    <li><a data-toggle="tab" href="#stats"><i class="fa fa-pie-chart"></i>&nbsp;Top 10 Artists</a></li>
+                    <li><a data-toggle="tab" href="#archives"><i class="fa fa-archive"></i>&nbsp;Archives</a></li>
+                    <li><a data-toggle="tab" href="#compiler"><i class="fa fa-users"></i>&nbsp;Compilers</a></li>
+
+                </ul>
+                <div class="tab-content">
+                    <div id="home" class="tab-pane cont">
+                        <div class="content">
+                            <div id="accordion2" class="panel-group accordion accordion-semi">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading primary">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2"
+                                                                   href="#collapse-1" aria-expanded="false"><i
+                                                        class="fa fa-angle-right"></i> About {{ radioStation.name }}</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-1" class="panel-collapse collapse in" aria-expanded="false">
+                                        <div class="panel-body">
+                                            {{ radioStation.bio }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading success">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2"
+                                                                   href="#collapse-2" class="collapsed"
+                                                                   aria-expanded="false"><i
+                                                        class="fa fa-angle-right"></i> Contact details</a></h4>
+                                    </div>
+                                    <div id="collapse-2" class="panel-collapse collapse" aria-expanded="false"
+                                         style="height: 0px;">
+                                        <div class="panel-body">
+                                            <div class="list-group">
+                                                <a href="#" class="list-group-item">
+                                                    <div><i class="fa fa-phone"></i>{{ radioStation.contactNumber }}
+                                                    </div>
+                                                    <div><i class="fa fa-envelope"></i> {{ radioStation.contactEmail }}
+                                                    </div>
+                                                    <div><i class="fa fa-link"></i> {{ radioStation.website }}</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading warning">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2"
+                                                                   href="#collapse-3" class="collapsed"
+                                                                   aria-expanded="false"><i
+                                                        class="fa fa-angle-right"></i> Genres</a></h4>
+                                    </div>
+                                    <div id="collapse-3" class="panel-collapse collapse" aria-expanded="false"
+                                         style="height: 0px;">
+                                        <div class="panel-body">
+                                            {% for genre in radioStation.genres %}
+                                                <button class="btn btn-default btn-rad">{{ genre.title }}</button>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2"
+                                                                   href="#collapse-4" class="collapsed"
+                                                                   aria-expanded="false"><i
+                                                        class="fa fa-angle-right"></i> Territory</a></h4>
+                                    </div>
+                                    <div id="collapse-4" class="panel-collapse collapse" aria-expanded="false"
+                                         style="height: 0px;">
+                                        <div class="panel-body">
+                                            {% for province in radioStation.provinces %}
+                                                <button class="btn btn-default btn-rad">{{ province.title }}</button>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading danger">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2"
+                                                                   href="#collapse-5" class="collapsed"
+                                                                   aria-expanded="false"><i
+                                                        class="fa fa-angle-right"></i> Supported languages</a></h4>
+                                    </div>
+                                    <div id="collapse-5" class="panel-collapse collapse" aria-expanded="false"
+                                         style="height: 0px;">
+                                        <div class="panel-body">
+                                            {% for language in radioStation.languages %}
+                                                <button class="btn btn-default btn-rad">{{ language.title }}</button>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading success">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2"
+                                                                   href="#collapse-6" class="collapsed"
+                                                                   aria-expanded="false"><i
+                                                        class="fa fa-angle-right"></i> Streams</a></h4>
+                                    </div>
+                                    <div id="collapse-6" class="panel-collapse collapse" aria-expanded="false"
+                                         style="height: 0px;">
+                                        <div class="panel-body">
+                                            Stream URL: {{ radioStation.stream }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="monitor" class="tab-pane active cont">
+                        <div class="content">
+                            {{ datatable_render(streamDatatable) }}
+                        </div>
+                    </div>
+
+                    <div id="charts" class="tab-pane cont">
+                        <div class="content">
+                            <h3>Top 10 Songs - Week #{{ "now"|date("W") }}/{{ "now"|date("Y") }}</h3>
+                            {% if arrTop10Songs|length > 0 %}
+                                <table class="no-border">
+                                <thead class="no-border">
+                                <tr>
+                                    <th style="width:25%;"><i class="fa fa-music"></i>&nbsp;Song</th>
+                                    <th style="width:25%;">Artist</th>
+                                    <th style="width:25%;">Album</th>
+                                    <th style="width:2%;"></th>
+                                    <th class="text-right">Total Count(*)</th>
+                                </tr>
+                                </thead>
+                                <tbody class="no-border-x no-border-y">
+                                {% for artist in arrTop10Songs %}
+                                    <tr>
+                                        {% set songId = artist['song_id'] %}
+                                        <td><span class="label label-{{ cycle(['success','danger','warning'], loop.index0) }}">{{ artist['title'] | truncate(40, true) }}</span>{% if artist['title']|length > 40 %}<i class="fa fa-info-circle-circle" data-placement="top" data-toggle="tooltip" data-original-title="{{ artist['title'] }}" ></i>{% endif %}</td>
+                                        <td>{{ artist['artist'] | truncate(15, true) }}</td>
+                                        <td>{{ artist['album'] | truncate(15, true) }} {% if artist['album']|length > 15 %}<i class="fa fa-info-circle-circle" data-placement="top" data-toggle="tooltip" data-original-title="{{ artist['album'] }}" ></i>{% endif %}</td>
+                                        <td>{% if artist['song_id'] %} <a href="{{ path('song_forward_to_profile',{ id:songId}) }}" title="Listen to song"><i class="fa fa-play-circle fa-lg"></i></a> {% endif %}</td>
+                                        <td class="text-right"><span class="badge badge-danger">{{ artist['played'] }}</span></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button><i class="fa fa-warning sign"></i><strong>Warning!</strong> No data available.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div id="stats" class="tab-pane cont">
+                        <div class="content">
+                            <h3>Top 10 Artist - Week #{{ "now"|date("W") }}/{{ "now"|date("Y") }}</h3>
+                            <br />
+                            {% if echartsData %}
+                                <div id="platform_type_dates" style="height: 600px;width:800px"></div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button><i class="fa fa-warning sign"></i><strong>Warning!</strong> No data available.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div id="archives" class="tab-pane cont">
+                        <div class="content">
+                            <h3>Archives</h3>
+                            <br />
+                            <br />
+                            {{ datatable_render(archivesDatatable) }}
+                        </div>
+                    </div>
+                    <div id="compiler" class="tab-pane cont">
+                        <div class="content">
+                            <h3>Playlist compilers</h3>
+                            {% if is_granted('ROLE_RADIO_STATION_ADMINISTRATOR') %}
+                            <a href="{{ path('compiler_add') }}" title="Add radio compiler" class="btn btn-primary btn-sm btn-rad pull-right"><i class="fa fa-plus-circle"></i>&nbsp;Add compiler</a>
+                            {% endif %}
+                            <br />
+                            <br />
+                            {{ datatable_render(compilerDatatable) }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+      </div>
+{% endblock body %}
+

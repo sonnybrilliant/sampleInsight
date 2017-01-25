@@ -1,0 +1,17 @@
+{% extends "::base.mail.txt.twig" %}
+{% block body %}
+    Dear {{ fullName }},
+
+    Your account has been created on {{ g_site_name }}.
+
+    login details are as follows:
+    Username: {{ username }}
+    Password: {{ password }}
+
+    Please follow the link below to reset your password.
+    {{ g_site_url }}
+
+    You can then change the new password in the account section.
+    This password is encrypted in our database but please change it as soon as possible.
+
+{% endblock %}

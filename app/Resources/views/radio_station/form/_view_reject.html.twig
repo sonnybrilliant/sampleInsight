@@ -1,0 +1,26 @@
+<form class="form-horizontal group-border-dashed" action="{{ path('radio_station_incoming_reject',{id:radioStationQueue.id}) }}" data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        <fieldset>
+            <legend><i class="fa fa-info-circle-circle"></i>&nbsp;Information</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.rejectedBy) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.rejectedAt) }}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="col-sm-12 col-md-12">
+        <h3>Reason song was rejected</h3>
+        {{ form_widget(form.message) }}
+        {{ form_errors(form.message) }}
+
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

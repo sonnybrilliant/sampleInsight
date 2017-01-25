@@ -1,0 +1,85 @@
+<form class="form-horizontal group-border-dashed"  data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        <fieldset>
+            <legend><i class="fa fa-music"></i>&nbsp;Song details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.id) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.isrc) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.artist) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.album) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.label) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.upc) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.releaseAt) }}
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form_row(form.playedAt) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.radioStation) }}
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-info-circle-circle"></i>&nbsp;Meta data</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.createdAt) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.streamId) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.version) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                        <label for="radio_station_stream_data" class="col-sm-5 control-label">JSON</label>
+                        <div class="col-md-7 controls  input-group ">
+                            <textarea id="radio_station_stream_data" name="radio_station_stream[data]" class="form-control" tabindex="13" rows="10" data-parsley-id="4893">{{ radioStationStream.data | json_encode() }}</textarea>
+                            <span class="input-group-addon" data-toggle="tooltip" data-container="body" data-placement="top" title="" data-original-title="JSON Object">
+			<i class="fa fa-question-circle"></i>
+		</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="text-center">
+            <a href="{{ path('monitor_list') }}" class="btn btn-default" tabindex="14" title="Cancel" alt="Cancel">Cancel</a>
+        </div>
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

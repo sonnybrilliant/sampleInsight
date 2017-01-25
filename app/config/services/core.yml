@@ -1,0 +1,51 @@
+services:
+  app.core.audio.editor.service:
+      class: AppBundle\Service\Core\Audio\AudioEditorService
+      arguments: ['@logger','%path_ffmpeg%','%path_ffprobe%']
+
+  #Advert
+  app.service.advert:
+     class: AppBundle\Service\Advert\AdvertService
+     arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@app.user.user_service','@app.core.content_type_service','@app.service.radio_station_stream']
+
+  app.form.advert.file.uploader:
+      class: AppBundle\Service\Advert\AdvertFileUploaderService
+      arguments: ['%advert_original_directory%']
+
+
+  #Slogan
+  app.service.slogan:
+     class: AppBundle\Service\Slogan\SloganService
+     arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@app.user.user_service','@app.core.content_type_service','@app.service.radio_station_stream']
+
+  app.form.slogan.file.uploader:
+      class: AppBundle\Service\Slogan\SloganFileUploaderService
+      arguments: ['%slogan_original_directory%']
+
+  #Promo
+  app.service.promo:
+     class: AppBundle\Service\Promo\PromoService
+     arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@app.user.user_service','@app.core.content_type_service']
+
+  app.form.promo.file.uploader:
+      class: AppBundle\Service\Promo\PromoFileUploaderService
+      arguments: ['%promo_original_directory%']
+
+  #Archive
+  app.service.archive:
+     class: AppBundle\Service\Archive\ArchiveService
+     arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','%recordings_original_directory%']
+
+  # Radio show
+  app.service.radio_show_type:
+      class: AppBundle\Service\RadioShow\RadioShowTypeService
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.user.user_service']
+
+  app.service.radio_show:
+      class: AppBundle\Service\RadioShow\RadioShowService
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.user.user_service','@app.core.status_service','@app.core.api.apostle','@app.handler.radio_show_time_slot_create']
+
+  # Radio show time slot
+  app.service.radio_show_time_slot:
+      class: AppBundle\Service\RadioShow\RadioShowTimeSlotService
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.core.status_service']

@@ -1,0 +1,144 @@
+{% extends ':record_label:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/echarts-all.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.js"></script>
+    <script src="{{ asset('assets/js/jquery.highlight.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    App.dataTables();
+{% endblock javascripts %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block alert %}
+                {% include "::alert.html.twig" %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-12">
+            <div class="block-flat profile-info">
+
+                <div class="hero-md">
+                    <div class="hero-label-image">
+                        <div class="hero-data">
+                                   <span class="hero-icon">
+                                       <img src="{{ asset('assets/images/record-label-icon.png') }}" alt="">
+                                    </span>
+                            <span class="hero-meta text-center">
+                                      <h2 class="meta-title">{{ recordLabel.name }}</h2>
+                                       <strong>Registered As:</strong>&nbsp;&nbsp;{% if recordLabel.registeredAs != '' %} {{ recordLabel.registeredAs }} {% else %} N/A {% endif %}
+                                | <strong>Contact:</strong>&nbsp;&nbsp;{% if recordLabel.email != '' %} {{ recordLabel.email }} {% else %} N/A {% endif %}
+                                | <strong>Website:</strong>&nbsp;&nbsp;{% if recordLabel.website != '' %} {{ recordLabel.website }} {% else %} N/A {% endif %}
+                                   </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-container m-t">
+                <ul class="nav nav-tabs styled-tabs">
+                    <li><a data-toggle="tab" href="#home"><i class="fa fa-info-circle"></i>&nbsp;Information</a></li>
+                    <li><a data-toggle="tab" href="#songs"><i class="fa fa-music"></i>&nbsp;Songs</a></li>
+                    <li class="active"><a data-toggle="tab" href="#transaction"><i class="fa fa-calendar"></i>&nbsp;Played At</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="home" class="tab-pane cont">
+                        <div class="content">
+                            <div id="accordion2" class="panel-group accordion accordion-color">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2" href="#collapse-1" aria-expanded="false"><i class="fa fa-angle-right"></i> About {{ recordLabel.name }}</a></h4>
+                                    </div>
+                                    <div id="collapse-1" class="panel-collapse collapse in" aria-expanded="false" >
+                                        <div class="panel-body">
+                                            {{ recordLabel.summary }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2" href="#collapse-2" class="collapsed" aria-expanded="false"><i class="fa fa-angle-right"></i> Contact details</a></h4>
+                                    </div>
+                                    <div id="collapse-2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="panel-body">
+                                            <div class="list-group">
+                                                <a href="#" class="list-group-item">
+                                                    <div><i class="fa fa-phone"></i>{% if recordLabel.contactNumber != '' %} {{ recordLabel.contactNumber }} {% else %} N/A {% endif %}</div>
+                                                    <div><i class="fa fa-envelope"></i> {% if recordLabel.email != '' %} {{ recordLabel.email }} {% else %} N/A {% endif %}</div>
+                                                    <div><i class="fa fa-link"></i> {% if recordLabel.website != '' %} {{ recordLabel.website }} {% else %} N/A {% endif %}</div>
+                                                    {% if recordLabel.facebook %}
+                                                        <div><i class="fa fa-facebook"></i> {{ recordLabel.facebook }}</div>
+                                                    {% endif %}
+                                                    {% if recordLabel.twitter %}
+                                                        <div><i class="fa fa-twitter"></i> {{ recordLabel.twitter }}</div>
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2" href="#collapse-3" class="collapsed" aria-expanded="false"><i class="fa fa-angle-right"></i> More details..</a></h4>
+                                    </div>
+                                    <div id="collapse-3" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="panel-body">
+                                            <table class="no-border no-strip skills">
+                                                <tbody class="no-border-x no-border-y">
+                                                {% if recordLabel.registeredAs %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Registered As</strong></td>
+                                                        <td>{{ recordLabel.registeredAs }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Is local?</strong><span data-toggle="tooltip" data-container="body" data-placement="top" title="" data-original-title="Is {{ recordLabel.name }} a South African company?"><i class="fa fa-question-circle"></i></span></td>
+                                                    <td>{% if recordLabel.isLocal %} <span class="label label-primary">YES</span> {% else %} <span class="label label-warning">NO</span> {% endif %}</td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- songs start -->
+                    <div id="songs" class="tab-pane cont">
+                        <div class="content">
+                            {{ datatable_render(songDatatable) }}
+                        </div>
+                    </div>
+                    <div id="transaction" class="tab-pane active cont">
+                        <div class="content">
+                            <h3>Transaction logs <i class="fa fa-info-circle-circle" data-placement="right" data-toggle="tooltip" data-original-title="These are the transaction logs of the songs monitored whilst playing on radio."></i></h3>
+                            <br /><br />
+
+                            {{ datatable_render(streamDatatable) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}">
+
+    <title>{% block title %}Oops! An Error Occurred{% endblock %}</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300,200,100' rel='stylesheet' type='text/css'>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('assets/js/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
+
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/style-override1.css') }}" rel="stylesheet" />
+
+</head>
+
+<body class="texture">
+
+
+<div id="cl-wrapper" class="error-container">
+    <div class="page-error">
+        {% block body %}
+        {% endblock body %}
+        <h3 class="text-center">Would you like to go <a href="{{ path('my_home') }}" title="Take me home">home</a>?</h3>
+    </div>
+    <div class="text-center copy">&copy; {{ date().format('Y')  }} <a href="#">{{ g_site_name }}</a></div>
+</div>
+<script type="text/javascript" src="{{ asset('assets/js/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/behaviour/general.js') }}"></script>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{  asset('assets/js/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<li {% if action == 'dashboard' %} class="active" {% endif %}>
+    <a href=""><i class="fa fa fa-home"></i><span>Dashboard</span></a>
+    <ul class="sub-menu" {% if action == 'dashboard_home' or action == 'dashboard_charts' %} style="display: block;"{% endif %}>
+        <li {% if action == 'dashboard_home' %} class="active" {% endif %}><a href="{{ path('dashboard_home') }}"><i class="fa fa-bar-chart-o"></i><span>Top Songs</span></a></li>
+        <li {% if action == 'dashboard_home_charts_artists' %} class="active" {% endif %}><a href="{{ path('dashboard_charts_artists') }}"><i class="fa fa-pie-chart"></i><span>Top Artists</span></a></li>
+    </ul>
+</li>

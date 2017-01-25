@@ -1,0 +1,20 @@
+{% if is_granted('ROLE_ADVERT_VIEW') %}
+    <li>
+        <a href="#"><i class="fa fa-bullhorn"></i><span>Slogans</span></a>
+        <ul class="sub-menu" {% if action == 'slogan_add' or action == 'slogan_list' %} style="display: block;"{% endif %}>
+            {% if is_granted('ROLE_ADVERT_EDIT') %}
+                <li {% if action == 'slogan_add' %}class="active" {% endif %}><a href="{{ path('slogan_add') }}"><i class="fa fa-plus-circle"></i><span>Add slogan</span></a></li>
+            {% endif %}
+
+            {% if is_granted('ROLE_ADVERT_VIEW') %}
+                <li {% if action == 'slogan_list' %} class="active" {% endif %}><a href="{{ path('slogan_list') }}"><i class="fa fa-list"></i><span>List slogan</span></a></li>
+            {% endif %}
+
+            {% if action == 'slogan_profile' %}
+                <li class="active"><a href="{{ path('slogan_profile',{ slug: slogan.slug}) }}"><i class="fa fa-eye"></i><span>Slogan profile</span></a></li>
+            {% endif %}
+
+
+        </ul>
+    </li>
+{% endif %}

@@ -1,0 +1,122 @@
+imports:
+    - { resource: 'services/core.yml' }
+    - { resource: 'services/form_handler.yml' }
+    - { resource: 'services/api.yml' }
+    - { resource: 'services/datatables.yml' }
+    - { resource: 'services/listener.yml' }
+    - { resource: 'services/consumer.yml' }
+
+services:
+
+  twig.extension.text:
+          class: Twig_Extensions_Extension_Text
+          tags:
+              - { name: twig.extension }
+
+  #Bundle services
+  gedmo.listener.softdeleteable:
+          class: Gedmo\SoftDeleteable\SoftDeleteableListener
+          tags:
+              - { name: doctrine.event_subscriber, connection: default }
+          calls:
+              - [ setAnnotationReader, [ '@annotation_reader' ] ]
+  #TWIG extensions
+  app.form.type.help_message:
+      class: AppBundle\Form\Extension\HelpMessageTypeExtension
+      tags:
+         - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType}
+
+  app.form.type.help_checkbox_message:
+      class: AppBundle\Form\Extension\HelpCheckBoxMessageTypeExtension
+      tags:
+        - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType}
+
+  app.form.type.pasley_validator:
+      class: AppBundle\Form\Extension\PasleyValidatorTypeExtension
+      tags:
+         - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType}
+
+  app.form.type.date_icon:
+      class: AppBundle\Form\Extension\DateIconTypeExtension
+      tags:
+         - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType}
+
+
+  # Core Related Services
+
+  app.security.login_form_authenticator:
+        class: AppBundle\Service\Security\LoginFormAuthenticator
+        arguments: ['@form.factory', '@doctrine.orm.entity_manager','@router','@security.user_password_encoder.generic','@event_dispatcher']
+
+  app.core.status_service:
+      class: AppBundle\Service\Core\StatusServices
+      arguments: ['@logger', '@doctrine.orm.entity_manager']
+
+  app.core.genre_service:
+      class: AppBundle\Service\Core\GenreService
+      arguments: ['@logger', '@doctrine.orm.entity_manager']
+
+  app.core.content_type_service:
+      class: AppBundle\Service\Core\ContentTypeService
+      arguments: ['@logger', '@doctrine.orm.entity_manager']
+
+  app.core.user_group_service:
+      class: AppBundle\Service\Core\UserGroupService
+      arguments: ['@logger', '@doctrine.orm.entity_manager']
+
+  app.alert.service:
+      class: AppBundle\Service\Core\FlashMessageService
+      autowire: true
+
+
+  # User Related Services
+  app.user.user_service:
+      class: AppBundle\Service\User\UserService
+      arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@security.token_storage']
+  # user - compiler
+  app.user.compiler_service:
+      class: AppBundle\Service\User\CompilerService
+      arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@security.token_storage']
+
+
+  #Record label
+  app.service.record_label:
+      class: AppBundle\Service\RecordLabel\RecordLabelService
+      arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@app.user.user_service']
+
+  #Artist
+  app.service.artist:
+      class: AppBundle\Service\Artist\ArtistService
+      arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@app.user.user_service','@app.core.api.deezer','@app.core.genre_service']
+
+  #Song
+  app.service.song:
+      class: AppBundle\Service\Song\SongService
+      arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@app.user.user_service','@app.service.radio_station_stream']
+
+  # Royalty Agency
+  app.service.royalty_agency:
+      class: AppBundle\Service\RoyaltyAgency\RoyaltyAgencyService
+      arguments: ['@logger', '@doctrine.orm.entity_manager', '@app.core.status_service','@app.user.user_service']
+
+ #Radio Stattion
+  app.service.radio_station:
+      class: AppBundle\Service\RadioStation\RadioStationService
+      arguments: ['@logger', '@doctrine.orm.entity_manager']
+
+  app.service.radio_station_incoming_queue:
+      class: AppBundle\Service\RadioStation\RadioStationIncomingQueueService
+      arguments: ['@logger', '@doctrine.orm.entity_manager']
+
+  app.service.radio_station_stream:
+      class: AppBundle\Service\RadioStation\RadioStationStreamService
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@old_sound_rabbit_mq.monitor_stream_producer','%rabbitmq_routing_key_monitor_push%','@event_dispatcher']
+
+  #Advertising organization
+  app.service.advertising_organization:
+      class: AppBundle\Service\AdvertisingOrganization\AdvertisingOrganizationService
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.user.user_service']
+
+
+
+

@@ -1,0 +1,66 @@
+{% extends ':dashboard:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block-flat">
+
+                {% if statsRange == 'this-week' %}
+                    <h3>Top 10 Songs - Week #{{ "now"|date("W") }}</h3>
+                {% elseif statsRange == 'last-week' %}
+                    <h3>Top 10 Songs - last week #{{ "now"|date_modify("-1 week") |date("W") }}</h3>
+                {% elseif statsRange == 'current-month' %}
+                    <h3>Top 10 Songs - current month #{{ "now"|date("M") }}</h3>
+                {% elseif statsRange == 'last-month' %}
+                    <h3>Top 10 Songs - last month #{{ "now"|date_modify("-1 month") |date("M") }}</h3>
+                {% elseif statsRange == 'historical' %}
+                    <h3>Top 10 Songs - Historical</h3>
+                {% endif %}
+                <div class="btn-group pull-right">
+                    <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle" aria-expanded="false">More stats.. <span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="{{ path('dashboard_home',{range:'this-week'}) }}">Current week</a></li>
+                        <li><a href="{{ path('dashboard_home',{range:'last-week'}) }}">Last week</a></li>
+                        <li><a href="{{ path('dashboard_home',{range:'current-month'}) }}">Current month</a></li>
+                        <li><a href="{{ path('dashboard_home',{range:'last-month'}) }}">Last month</a></li>
+                        <li><a href="{{ path('dashboard_home',{range:'historical'}) }}">Historical</a></li>
+                    </ul>
+                </div>
+                <div class="content">
+                    {% if arrTopWeekSongs|length > 0 %}
+                    <table class="no-border">
+                        <thead class="no-border">
+                        <tr>
+                            <th style="width:15%;"><i class="fa fa-music"></i>&nbsp;&nbsp;Song</th>
+                            <th style="width:20%;">Artist</th>
+                            <th style="width:20%;">Album</th>
+                            <th></th>
+                            <th class="text-right">Total Count(*)</th>
+                        </tr>
+                        </thead>
+                        <tbody class="no-border-x no-border-y">
+                        {% for artist in arrTopWeekSongs %}
+                            <tr>
+                                {% set songId = artist['song_id'] %}
+                                <td><span class="label label-{{ cycle(['success','danger','warning'], loop.index0) }}">{{ artist['title'] | truncate(40, true) }}</span>{% if artist['title']|length > 40 %}<i class="fa fa-info-circle-circle" data-placement="top" data-toggle="tooltip" data-original-title="{{ artist['title'] }}" ></i>{% endif %}</td>
+                                <td>{{ artist['artist'] | truncate(15, true) }} {% if artist['artist']|length > 15 %}<i class="fa fa-info-circle-circle" data-placement="top" data-toggle="tooltip" data-original-title="{{ artist['artist'] }}" ></i>{% endif %}</td>
+                                <td>{{ artist['album'] | truncate(15, true) }} {% if artist['album']|length > 15 %}<i class="fa fa-info-circle-circle" data-placement="top" data-toggle="tooltip" data-original-title="{{ artist['album'] }}" ></i>{% endif %}</td>
+                                <td>{% if artist['song_id'] %} <a href="{{ path('song_forward_to_profile',{ id:songId}) }}" title="Listen to song"><i class="fa fa-play-circle fa-lg"></i></a> {% endif %}</td>
+                                <td class="text-right"><span class="badge badge-danger">{{ artist['played'] }}</span></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button><i class="fa fa-warning sign"></i><strong>A!</strong> No data available.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+

@@ -1,0 +1,29 @@
+{% if is_granted('ROLE_SHOW_VIEW') %}
+    <li>
+        <a href="#"><i class="fa fa-microphone"></i><span>Radio shows</span></a>
+        <ul class="sub-menu" {% if action == 'radio_show_profile' or action == 'radio_show_edit' %} style="display: block;"{% endif %}>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li {% if action == 'radio_show_type_add' %} class="active" {% endif %}><a href="{{ path('radio_show_type_add') }}"><i
+                                class="fa fa-plus-circle"></i><span>Add show type</span></a></li>
+            {% endif %}
+
+            {% if is_granted('ROLE_SHOW_EDIT') %}
+                <li {% if action == 'radio_show_add' %} class="active" {% endif %}><a href="{{ path('radio_show_add') }}"><i
+                                class="fa fa-plus-circle"></i><span>Add show</span></a></li>
+            {% endif %}
+
+            {% if is_granted('ROLE_SHOW_VIEW') %}
+                <li {% if action == 'radio_show_list' %} class="active" {% endif %}><a href="{{ path('radio_show_list') }}"><i
+                                class="fa fa-list"></i><span>List shows</span></a></li>
+            {% endif %}
+
+            {% if action == 'radio_show_profile' %}
+                <li class="active"><a href="{{ path('radio_show_profile',{slug:radioShow.slug}) }}"><i class="fa fa-eye"></i><span>Profile</span></a></li>
+            {% endif %}
+
+            {% if action == 'radio_show_edit' %}
+                <li class="active"><a href="{{ path('radio_show_edit',{slug:radioShow.slug}) }}"><i class="fa fa-edit"></i><span>Edit</span></a></li>
+            {% endif %}
+        </ul>
+    </li>
+{% endif %}

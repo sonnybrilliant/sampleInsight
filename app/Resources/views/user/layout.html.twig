@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+{% block page_header %}
+    <div class="page-head">
+        <h2>{{ page_header }}</h2>
+        <ol class="breadcrumb">
+            <li><a href="{{ path('dashboard_home') }}">Home</a></li>
+            {% if user.userGroup.title == "Administrator" %}
+                <li><a href="">Administrators</a></li>
+                <li class="active">{{ breadcrumb }}</li>
+            {% elseif user.isRadioStationCompiler == true %}
+                <li><a href="{{ path('compiler_list') }}">Compilers</a></li>
+                <li class="active">{{ breadcrumb }}</li>
+            {% endif %}
+        </ol>
+    </div>
+{% endblock page_header %}
+
+{% block body %}
+{% endblock body %}

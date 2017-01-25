@@ -1,0 +1,97 @@
+<form class="form-horizontal group-border-dashed" action="{{ path('artist_edit',{slug:artist.slug}) }}" data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        <fieldset>
+            <legend><i class="fa fa-exclamation-triangle"></i>&nbsp;Important</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.isBand) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.status) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-user"></i>&nbsp;Act details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.fullName) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.gender) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.isLocal) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.isAfrican) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-music"></i>&nbsp;Genres</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.genres) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-image"></i>&nbsp;Image</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.artistImage) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-book"></i>&nbsp;Bio</legend>
+            <div class="row">
+                <div class="col-sm-12">
+                    {{ form_widget(form.bio) }}
+                    <br />
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.bioSource) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-globe"></i>&nbsp;Social media</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.website) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.twitter) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.facebook) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.apiDeezerId) }}
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="text-center">
+            <button class="btn btn-danger btn-lg" type="submit" tabindex="11"><i class="fa fa-save"></i> Update</button>
+            <a href="{{ path('artist_list') }}" class="btn btn-default" tabindex="12" title="Cancel" alt="Cancel">Cancel</a>
+        </div>
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

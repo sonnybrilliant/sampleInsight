@@ -1,0 +1,284 @@
+{% extends ':show:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
+{% endblock stylesheets %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block alert %}
+                {% include "::alert.html.twig" %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-12">
+            <div class="block-flat profile-info">
+
+                <div class="hero-md">
+                    <div class="hero-artist-image">
+                        <div class="hero-data">
+                                   <span class="hero-icon">
+                                       <img src="{{ asset('assets/images/artist-page-icon.png') }}" alt="">
+                                    </span>
+                            <span class="hero-meta text-center">
+                                      <h2 class="meta-title">{{ radioShow.title }}</h2>
+                                      <strong>Type:</strong>&nbsp;{{ radioShow.radioShowType }}
+                                      &nbsp;|&nbsp;<strong>Schedule:</strong>&nbsp;{{ radioShow.radioShowScheduleType }}
+                                      &nbsp;|&nbsp;<strong>Station:</strong>&nbsp;&nbsp;{{ radioShow.radioStation.name }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-container m-t">
+                <ul class="nav nav-tabs styled-tabs">
+                    <li class="active"><a data-toggle="tab" href="#info"><i class="fa fa-info-circle-circle"></i>&nbsp;Information</a></li>
+                    {#<li class="active"><a data-toggle="tab" href="#songs"><i class="fa fa-music"></i>&nbsp;Songs</a></li>#}
+                    {#<li><a data-toggle="tab" href="#transaction"><i class="fa fa-bars"></i>&nbsp;Played At</a></li>#}
+                </ul>
+                <div class="tab-content">
+                    <div id="info" class="tab-pane active cont">
+
+                        <div class="content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="page-header">
+                                        <h3><i class="fa fa-comment-o"></i>&nbsp;About <strong>{{ radioShow.title }}</strong></h3>
+                                    </div>
+                                    <div class="content">
+                                        <p>
+                                            {{ radioShow.description }}
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="page-header">
+                                        <h4><i class="fa fa-calendar"></i>&nbsp; Schedule</h4>
+                                    </div>
+                                    <div class="content col-md-5">
+                                        {% if radioShow.playsMonday %}
+                                            <div class="col-md-10">
+                                                <p style="display: inline;"><i class="fa fa-calendar-o"></i>&nbsp;<strong>Monday</strong></p>
+                                                <p class="pull-right" style="display: inline;"><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ radioShow.startTime | date('H:i A') }}</strong>&nbsp; - &nbsp;<strong>{{ radioShow.endTime | date('H:i A') }}</strong></p>
+                                            </div>
+                                        {% endif %}
+                                        {% if radioShow.playsTuesday %}
+                                            <div class="col-md-10">
+                                                <p style="display: inline;"><i class="fa fa-calendar-o"></i>&nbsp;<strong>Tuesday</strong></p>
+                                                <p class="pull-right" style="display: inline;"><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ radioShow.startTime | date('H:i A') }}</strong>&nbsp; - &nbsp;<strong>{{ radioShow.endTime | date('H:i A') }}</strong></p>
+                                            </div>
+                                        {% endif %}
+                                        {% if radioShow.playsWednesday %}
+                                            <div class="col-md-10">
+                                                <p style="display: inline;"><i class="fa fa-calendar-o"></i>&nbsp;<strong>Wednesday</strong></p>
+                                                <p class="pull-right" style="display: inline;"><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ radioShow.startTime | date('H:i A') }}</strong>&nbsp; - &nbsp;<strong>{{ radioShow.endTime | date('H:i A') }}</strong></p>
+                                            </div>
+                                        {% endif %}
+                                        {% if radioShow.playsThursday %}
+                                            <div class="col-md-10">
+                                                <p style="display: inline;"><i class="fa fa-calendar-o"></i>&nbsp;<strong>Thursday</strong></p>
+                                                <p class="pull-right" style="display: inline;"><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ radioShow.startTime | date('H:i A') }}</strong>&nbsp; - &nbsp;<strong>{{ radioShow.endTime | date('H:i A') }}</strong></p>
+                                            </div>
+                                        {% endif %}
+                                        {% if radioShow.playsFriday %}
+                                            <div class="col-md-10">
+                                                <p style="display: inline;"><i class="fa fa-calendar-o"></i>&nbsp;<strong>Friday</strong></p>
+                                                <p class="pull-right" style="display: inline;"><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ radioShow.startTime | date('H:i A') }}</strong>&nbsp; - &nbsp;<strong>{{ radioShow.endTime | date('H:i A') }}</strong></p>
+                                            </div>
+                                        {% endif %}
+                                        {% if radioShow.playsSaturday %}
+                                            <div class="col-md-10">
+                                                <p style="display: inline;"><i class="fa fa-calendar-o"></i>&nbsp;<strong>Saturday</strong></p>
+                                                <p class="pull-right" style="display: inline;"><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ radioShow.startTime | date('H:i A') }}</strong>&nbsp; - &nbsp;<strong>{{ radioShow.endTime | date('H:i A') }}</strong></p>
+                                            </div>
+                                        {% endif %}
+                                        {% if radioShow.playsSunday %}
+                                            <div class="col-md-10">
+                                                <p style="display: inline;"><i class="fa fa-calendar-o"></i>&nbsp;<strong>Sunday</strong></p>
+                                                <p class="pull-right" style="display: inline;"><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ radioShow.startTime | date('H:i A') }}</strong>&nbsp; - &nbsp;<strong>{{ radioShow.endTime | date('H:i A') }}</strong></p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- songs start -->
+                    <div id="songs" class="tab-pane cont">
+                        {#{% if is_granted('ROLE_SONG_EDIT') %}#}
+                            {#<a href="{{ path('song_add') }}" title="Add song" class="btn btn-primary btn-sm btn-rad pull-right"><i class="fa fa-plus-circle"></i>&nbsp;Add song</a>#}
+                            {#<br /><br />#}
+                        {#{% endif %}#}
+                        {#<div class="content">#}
+                            {#{{ datatable_render(songDatatable) }}#}
+                        {#</div>#}
+                    </div>
+                    <div id="transaction" class="tab-pane cont">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.js"></script>
+    <script src="{{ asset('assets/js/jquery.highlight.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+    <script type="text/javascript">
+
+        {#{% if echartsData %}#}
+
+        {#{% if statsRange == 'this-week' %}#}
+        {#{% set data_option_name = "now"|date("W")  %}#}
+        {#{% set name_period = "Week"  %}#}
+        {#{% elseif statsRange == 'last-week' %}#}
+        {#{% set data_option_name = "now"|date_modify("-1 week") |date("W")  %}#}
+        {#{% set name_period = "Week"  %}#}
+        {#{% elseif statsRange == 'current-month' %}#}
+        {#{% set data_option_name = "now"|date("F")  %}#}
+        {#{% set name_period = "Month"  %}#}
+        {#{% elseif statsRange == 'last-month' %}#}
+        {#{% set data_option_name = "now"|date_modify("-1 month") |date("F")  %}#}
+        {#{% set name_period = "Month"  %}#}
+        {#{% endif %}#}
+
+        {#var myChart = echarts.init(document.getElementById('platform_type_dates'),"macarons2");#}
+        {#myChart.setOption({#}
+            {#calculable: true,#}
+            {#timeline : {#}
+                {#show: false,#}
+                {#data : ['{{ data_option_name }}'],#}
+                {#label : {#}
+                    {#formatter : function(s) {#}
+                        {#return s.slice(0, 5);#}
+                    {#}#}
+                {#},#}
+                {#x:10,#}
+                {#y:null,#}
+                {#x2:10,#}
+                {#y2:0,#}
+                {#width:250,#}
+                {#height:50,#}
+                {#backgroundColor:"rgba(0,0,0,0)",#}
+                {#borderColor:"#eaeaea",#}
+                {#borderWidth:0,#}
+                {#padding:5,#}
+                {#controlPosition:"left",#}
+                {#autoPlay:false,#}
+                {#loop:true,#}
+                {#playInterval:2000,#}
+                {#lineStyle:{#}
+                    {#width:1,#}
+                    {#color:"#bdbdbd",#}
+                    {#type:""#}
+                {#},#}
+
+            {#},#}
+            {#options : [#}
+                {#{#}
+                    {#title : {#}
+                        {#text: '',#}
+                        {#subtext: '',#}
+                        {#//x: 'center',#}
+
+                    {#},#}
+                    {#tooltip : {#}
+                        {#trigger: 'item',#}
+                        {#formatter: "Song: {b} <br/>{{ name_period }}: {a} <br/> Playlisted: {c} <br/> Perc: ({d}%)"#}
+                    {#},#}
+                    {#legend: {#}
+                        {#show: true,#}
+                        {#x: 'left',#}
+                        {#orient:'vertical',#}
+                        {#padding: 0,#}
+                        {#data:{{ echartsData["labels"]|json_encode| raw }}#}
+                    {#},#}
+                    {#toolbox: {#}
+                        {#show : true,#}
+                        {#color : ['#bdbdbd','#bdbdbd','#bdbdbd','#bdbdbd'],#}
+                        {#showTitle:true,#}
+                        {#feature : {#}
+                            {#mark : {show: false},#}
+                            {#dataView : {show: false, readOnly: true},#}
+                            {#magicType : {#}
+                                {#show: true,#}
+                                {#type: ['pie', 'funnel'],#}
+                                {#title: {#}
+                                    {#pie: 'Pie Chart',#}
+                                    {#funnel: 'Funnel'#}
+                                {#},#}
+                                {#option: {#}
+                                    {#funnel: {#}
+                                        {#x: '10%',#}
+                                        {#width: '80%',#}
+                                        {#funnelAlign: 'center',#}
+                                        {#max: 50#}
+                                    {#},#}
+                                    {#pie: {#}
+                                        {#roseType : 'radius',#}
+                                    {#}#}
+                                {#}#}
+                            {#},#}
+                            {#restore : {#}
+                                {#show: true,#}
+                                {#title: 'Restore'#}
+                            {#},#}
+                            {#saveAsImage : {#}
+                                {#show: true,#}
+                                {#title : 'Save As',#}
+                            {#}#}
+                        {#}#}
+                    {#},#}
+
+
+                    {#series : [#}
+                        {#{#}
+                            {#name:'{{ data_option_name }}',#}
+                            {#type:'pie',#}
+                            {#radius : [10, '60%'],#}
+                            {#roseType : 'radius',#}
+                            {#center: ['50%', '45%'],#}
+                            {#width: '50%',       // for funnel#}
+                            {#itemStyle : {#}
+                                {#normal : {#}
+                                    {#label : { show : true },#}
+                                    {#labelLine : { show : true },#}
+                                    {#borderColor:"rgba(0,0,0,0)",#}
+                                    {#borderWidth:10,#}
+                                {#},#}
+                                {#emphasis : { label : { show : false }, labelLine : {show : false} }#}
+                            {#},#}
+                            {#data:{{ echartsData["data"]|json_encode| raw }}#}
+                        {#}#}
+                    {#]#}
+                {#}#}
+            {#] // end options object#}
+
+        {#});#}
+
+        {#myChart.setTheme("infographic");#}
+        {#{% endif %}#}
+    </script>
+{% endblock javascripts %}

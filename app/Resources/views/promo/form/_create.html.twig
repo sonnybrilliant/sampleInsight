@@ -1,0 +1,41 @@
+<form class="form-horizontal group-border-dashed" action="{{ path('promo_add') }}" data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        <fieldset>
+            <legend><i class="fa fa-info-circle"></i>&nbsp;Promotion details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.radioStation) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.isRadioPromo) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.radioShow) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-microphone"></i>&nbsp;Audio file</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.localFile) }}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="text-center">
+            <button class="btn btn-danger btn-lg" type="submit" tabindex="11"><i class="fa fa-save"></i> Add</button>
+            <a href="{{ path('promo_list') }}" class="btn btn-default" tabindex="12" title="Cancel" alt="Cancel">Cancel</a>
+        </div>
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

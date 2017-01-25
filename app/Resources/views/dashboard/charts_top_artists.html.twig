@@ -1,0 +1,166 @@
+{% extends ':dashboard:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block-flat">
+                {% if statsRange == 'this-week' %}
+                    <h3>Top 10 Artist - Week #{{ "now"|date("W") }}</h3>
+                {% elseif statsRange == 'last-week' %}
+                    <h3>Top 10 Artist - last week #{{ "now"|date_modify("-1 week") |date("W") }}</h3>
+                {% elseif statsRange == 'current-month' %}
+                    <h3>Top 10 Artists - current month #{{ "now"|date("M") }}</h3>
+                {% elseif statsRange == 'last-month' %}
+                    <h3>Top 10 Artists - last month #{{ "now"|date_modify("-1 month") |date("M") }}</h3>
+                {% elseif statsRange == 'historical' %}
+                    <h3>Top 10 Artists - Historical</h3>
+                {% endif %}
+                {% if arrTopWeekArtists %}
+                    <div class="btn-group pull-right">
+                        <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle" aria-expanded="false">More stats.. <span class="caret"></span></button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('dashboard_charts_artists',{range:'this-week'}) }}">Current week</a></li>
+                            <li><a href="{{ path('dashboard_charts_artists',{range:'last-week'}) }}">Last week</a></li>
+                            <li><a href="{{ path('dashboard_charts_artists',{range:'current-month'}) }}">Current month</a></li>
+                            <li><a href="{{ path('dashboard_charts_artists',{range:'last-month'}) }}">Last month</a></li>
+                            <li><a href="{{ path('dashboard_charts_artists',{range:'historical'}) }}">Historical</a></li>
+                        </ul>
+                    </div>
+                    <br /><br />
+                    <div id="platform_type_dates" style="height: 420px;width: 900px;"></div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button><i class="fa fa-warning sign"></i><strong>A!</strong> No data available.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/echarts-all.js') }}"></script>
+    <script type="text/javascript">
+        {% if arrTopWeekArtists %}
+        var myChart = echarts.init(document.getElementById('platform_type_dates'),"macarons2");
+        myChart.setOption({
+            calculable: true,
+            timeline : {
+                show: false,
+                data : ['{{ "now" | date('W') }}'],
+                label : {
+                    formatter : function(s) {
+                        return s.slice(0, 5);
+                    }
+                },
+                x:10,
+                y:null,
+                x2:10,
+                y2:0,
+                width:250,
+                height:50,
+                backgroundColor:"rgba(0,0,0,0)",
+                borderColor:"#eaeaea",
+                borderWidth:0,
+                padding:5,
+                controlPosition:"left",
+                autoPlay:false,
+                loop:true,
+                playInterval:2000,
+                lineStyle:{
+                    width:1,
+                    color:"#bdbdbd",
+                    type:""
+                },
+
+            },
+            options : [
+                {
+                    title : {
+                        text: '',
+                        subtext: '',
+                        //x: 'center',
+
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "Artist: {b} <br/>Week: {a} <br/> Playlisted: {c} <br/> Perc: ({d}%)"
+                    },
+                    legend: {
+                        show: true,
+                        x: 'left',
+                        orient:'vertical',
+                        padding: 0,
+                        data:{{ arrTopWeekArtists["labels"]|json_encode| raw }}
+                    },
+                    toolbox: {
+                        show : true,
+                        color : ['#bdbdbd','#bdbdbd','#bdbdbd','#bdbdbd'],
+                        showTitle:true,
+                        feature : {
+                            mark : {show: false},
+                            dataView : {show: false, readOnly: true},
+                            magicType : {
+                                show: true,
+                                type: ['pie', 'funnel'],
+                                title: {
+                                    pie: 'Pie Chart',
+                                    funnel: 'Funnel'
+                                },
+                                option: {
+                                    funnel: {
+                                        x: '10%',
+                                        width: '80%',
+                                        funnelAlign: 'center',
+                                        max: 50
+                                    },
+                                    pie: {
+                                        roseType : 'radius',
+                                    }
+                                }
+                            },
+                            restore : {
+                                show: true,
+                                title: 'Restore'
+                            },
+                            saveAsImage : {
+                                show: true,
+                                title : 'Save As',
+                            }
+                        }
+                    },
+
+
+                    series : [
+                        {
+                            name:'{{ "now"| date("W") }}',
+                            type:'pie',
+                            radius : [10, '60%'],
+                            roseType : 'radius',
+                            center: ['50%', '45%'],
+                            width: '50%',       // for funnel
+                            itemStyle : {
+                                normal : {
+                                    label : { show : true },
+                                    labelLine : { show : true },
+                                    borderColor:"rgba(0,0,0,0)",
+                                    borderWidth:10,
+                                },
+                                emphasis : { label : { show : false }, labelLine : {show : false} }
+                            },
+                            data:{{ arrTopWeekArtists["data"]|json_encode| raw }}
+                        }
+                    ]
+                }
+            ] // end options object
+
+        });
+
+        myChart.setTheme("infographic");
+        {% endif %}
+    </script>
+
+{% endblock javascripts %}

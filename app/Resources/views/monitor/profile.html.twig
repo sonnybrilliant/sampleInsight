@@ -1,0 +1,21 @@
+{% extends ':monitor:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% include '::alert.html.twig'%}
+            <div class="block-flat">
+                <div class="content">
+                    {% include "monitor/form/_view.html.twig" %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+
+
+
+

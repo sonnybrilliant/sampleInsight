@@ -1,0 +1,10 @@
+<li>
+    <a href="#"><i class="fa fa-desktop"></i><span>Monitoring</span></a>
+    <ul class="sub-menu" {% if action == 'monitor_profile' or action == 'monitor_edit' %} style="display: block;"{% endif %}>
+        <li {% if action == 'monitor_list' %} class="active" {% endif %}><a href="{{ path('monitor_list') }}"><i class="fa fa-music"></i><span>Live monitoring</span></a></li>
+
+        {% if action == 'monitor_profile' %}
+        <li class="active"><a href="{{ path('monitor_profile',{id:radioStationStream.id}) }}"><i class="fa fa-eye"></i><span>Stream profile</span></a></li>
+        {% endif %}
+    </ul>
+</li>

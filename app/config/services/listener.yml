@@ -1,0 +1,64 @@
+services:
+  #Event Listener
+  app.doctrine.hash_password_listener:
+        class: AppBundle\Doctrine\HashPasswordListener
+        autowire: true
+        tags:
+            - { name: doctrine.event_subscriber }
+
+  app.doctrine.record_label_hidden_name_listener:
+        class: AppBundle\Doctrine\RecordLabelHiddenNameListener
+        autowire: true
+        tags:
+            - { name: doctrine.event_subscriber }
+
+  app.event_listener_user.on_user_login:
+      class: AppBundle\EventListener\User\OnUserLogin
+      arguments: ['@logger', '@doctrine.orm.entity_manager']
+      tags:
+        - { name: kernel.event_subscriber}
+
+  app.event_listener_user.on_user_compiler_create:
+      class: AppBundle\EventListener\User\OnUserCompilerCreate
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@templating','@mailer','%from.name%','%from.email%','%site_name%']
+      tags:
+          - { name: kernel.event_subscriber}
+
+  app.event_listener_user.on_song_upload:
+      class: AppBundle\EventListener\Song\OnSongUpload
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@templating','@mailer','%from.name%','%from.email%','%site_name%','@app.user.user_service','@router']
+      tags:
+          - { name: kernel.event_subscriber}
+
+  app.event_listener_user.on_song_upload_approve:
+      class: AppBundle\EventListener\Song\OnSongInitialApprove
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@templating','@mailer','%from.name%','%from.email%','%site_name%','@app.user.compiler_service','@router']
+      tags:
+          - { name: kernel.event_subscriber}
+
+  app.event_listener_user.on_incoming_radio_stream:
+      class: AppBundle\EventListener\RadioStationStream\OnStreamIncoming
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.service.radio_station_stream','@app.core.api.apostle']
+      tags:
+          - { name: kernel.event_subscriber}
+
+  #record label
+  app.event_listener_user.on_record_label_verify:
+      class: AppBundle\EventListener\RecordLabel\OnVerify
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.service.radio_station_stream']
+      tags:
+          - { name: kernel.event_subscriber}
+
+  #artist
+  app.event_listener_user.on_artist_verify:
+      class: AppBundle\EventListener\Artist\OnVerify
+      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.service.radio_station_stream']
+      tags:
+          - { name: kernel.event_subscriber}
+
+#  #File processing
+#  app.event_listener_file.on_finger_print_bucket:
+#      class: AppBundle\EventListener\Audio\OnFileFingerPrintBucket
+#      arguments: ['@logger', '@doctrine.orm.entity_manager','@app.core.acrcloud.upload.audio','@old_sound_rabbit_mq.finger_print_audio_bucket_producer','%rabbitmq_routing_key_file_finger_bucket_print_push%']
+#      tags:
+#          - { name: kernel.event_subscriber}

@@ -1,0 +1,207 @@
+{% extends ':promo:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/soundManager/css/flashblock.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/soundManager/css/360player.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/soundManager/css/360player-visualization.css') }}" />
+{% endblock stylesheets %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- special IE-only canvas fix -->
+    <!--[if IE]>
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/excanvas.js') }}"></script><![endif]-->
+
+    <!-- Apache-licensed animation library -->
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/berniecode-animator.js') }}"></script>
+
+    <!-- the core stuff -->
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/soundmanager2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/360player.js') }}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.js"></script>
+    <script src="{{ asset('assets/js/jquery.highlight.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+    <script type="text/javascript">
+        soundManager.setup({
+            // path to directory containing SM2 SWF
+            url: '{{ asset('/assets/js/soundManager/') }}swf/',
+            debugMode: false
+        });
+
+        threeSixtyPlayer.config.scaleFont = (navigator.userAgent.match(/msie/i)?false:true);
+        threeSixtyPlayer.config.showHMSTime = true;
+
+        // enable some spectrum stuffs
+
+        threeSixtyPlayer.config.useWaveformData = true;
+        threeSixtyPlayer.config.useEQData = true;
+
+        // enable this in SM2 as well, as needed
+
+        if (threeSixtyPlayer.config.useWaveformData) {
+            soundManager.flash9Options.useWaveformData = true;
+        }
+        if (threeSixtyPlayer.config.useEQData) {
+            soundManager.flash9Options.useEQData = true;
+        }
+        if (threeSixtyPlayer.config.usePeakData) {
+            soundManager.flash9Options.usePeakData = true;
+        }
+
+        if (threeSixtyPlayer.config.useWaveformData || threeSixtyPlayer.flash9Options.useEQData || threeSixtyPlayer.flash9Options.usePeakData) {
+            // even if HTML5 supports MP3, prefer flash so the visualization features can be used.
+            soundManager.preferFlash = true;
+        }
+
+        // favicon is expensive CPU-wise, but can be used.
+        if (window.location.href.match(/hifi/i)) {
+            threeSixtyPlayer.config.useFavIcon = true;
+        }
+
+        if (window.location.href.match(/html5/i)) {
+            // for testing IE 9, etc.
+            soundManager.useHTML5Audio = true;
+        }
+
+    </script>
+
+{% endblock javascripts %}
+
+
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block alert %}
+                {% include "::alert.html.twig" %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-12">
+            <div class="block-flat profile-info">
+                <div class="hero-md">
+                    <div class="hero-promo-image">
+                        <div class="hero-data">
+                                   <span class="hero-icon">
+                                       <img src="{{ asset('assets/images/icon-sets/promo_white.png') }}" alt="">
+                                    </span>
+                            <span class="hero-meta text-center">
+                                      <h2 class="meta-title">#Promo {{ promo.title |length > 25 ? promo.title|slice(0, 25) ~ '...': promo.title }}</h2>
+                                       <strong>Radio station:</strong>&nbsp;&nbsp;{{ promo.radioStation.name }} |
+                                       <strong>Content Type:</strong>&nbsp;&nbsp;Promotion
+                                       {% if promo.isRadioPromo %}
+                                           | <strong>Show:</strong>&nbsp;&nbsp;{{ promo.radioShow.title }}
+                                       {% endif %}
+                                   </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-bar">
+                    {% if promo.s3File != '' %}
+                        <div class="ui360 ui360-vis"><a href="{{ promo.s3File }}"></a></div>
+                    {% else %}
+                        <div class="ui360 ui360-vis"><a href="{{ absolute_url(asset('uploads/promo/' ~ promo.localFile)) }}"></a></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-container m-t">
+                <ul class="nav nav-tabs styled-tabs">
+                    <li><a data-toggle="tab" href="#home"><i class="fa fa-info-circle"></i>&nbsp;Information</a></li>
+                    <li class="active"><a data-toggle="tab" href="#transaction"><i class="fa fa-calendar"></i>&nbsp;Played At</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="home" class="tab-pane cont">
+                        <div class="content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="page-header">
+                                        <h3>#Promo {{ promo.title }}</h3>
+                                    </div>
+                                    <div class="content">
+                                        <div class="col-sm-8">
+                                            <table class="no-border no-strip skills">
+                                                <tbody class="no-border-x no-border-y">
+
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Radio station</strong></td>
+                                                    <td><a href="{{ path('radio_station_profile',{ slug: promo.radioStation.slug}) }}">{{ promo.radioStation.name }}</a> </td>
+                                                </tr>
+                                                {% if promo.isRadioPromo %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Radio show</strong></td>
+                                                    <td><strong>{{ promo.radioShow.title }}</strong> - <i class="fa fa-clock-o"></i> {{ promo.radioShow.startTime | date('g:ia') }} - {{ promo.radioShow.endTime | date('g:ia') }}</td>
+                                                </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Status</strong></td>
+                                                    <td>
+                                                        {% if promo.status.code == 'active' %}
+                                                            <span class="label label-primary">{{ promo.status.title }}</span>
+                                                        {% elseif promo.status.code == 'error' %}
+                                                            <span class="label label-danger">{{ promo.status.title }}</span>
+                                                        {% else %}
+                                                            <span class="label label-default">{{ promo.status.title }}</span>
+                                                        {% endif %}
+
+                                                    </td>
+                                                </tr>
+
+                                                {% if promo.expireAt %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Expiry On</strong></td>
+                                                        <td>{{ promo.expireAt | date("F jS \\a\\t g:ia") }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if promo.lastPlayedAt %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Last played At</strong></td>
+                                                        <td>{{ promo.lastPlayedAt | date("F jS \\a\\t g:ia")}}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Added By</strong></td>
+                                                    <td>{{ promo.createdBy }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Added At</strong></td>
+                                                    <td>{{ promo.createdAt | date("F jS \\a\\t g:ia") }}</td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="transaction" class="tab-pane active cont">
+                        <h3>Transaction logs <i class="fa fa-info-circle-circle" data-placement="right" data-toggle="tooltip" data-original-title="These are the transaction logs of the promo monitored whilst playing on radio."></i></h3>
+                        <br /><br />
+                        {{ datatable_render(promoDatatable) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
+

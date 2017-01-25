@@ -1,0 +1,255 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+    artist_profile_directory: '%kernel.root_dir%/../web/uploads/artist'
+    song_original_directory: '%kernel.root_dir%/../web/uploads/song'
+    advert_original_directory: '%kernel.root_dir%/../web/uploads/advert'
+    promo_original_directory: '%kernel.root_dir%/../web/uploads/promo'
+    slogan_original_directory: '%kernel.root_dir%/../web/uploads/slogan'
+    event_original_directory: '%kernel.root_dir%/../web/uploads/event'
+    recordings_original_directory: '%kernel.root_dir%/../web/uploads/recordings'
+    from.name: "%from_name%"
+    from.email: "%from_address%"
+    path_ffmpeg: "%bin_ffmpeg%"
+    path_ffprobe: "%bin_ffprobe%"
+
+framework:
+    #esi:             ~
+    translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    globals:
+        g_site_name: "%site_name%"
+        g_site_url: "%site_url%"
+        g_site_domain: "%site_domain%"
+        g_site_version: "%site_version%"
+    form_themes:
+        - 'form/fields.html.twig'
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+#        #remove those line if you do not have apc
+#        metadata_cache_driver: "%cache_driver%"
+#        query_cache_driver: "%cache_driver%"
+#        result_cache_driver: "%cache_driver%"
+        mappings:
+            gedmo_translatable:
+                type: annotation
+                prefix: Gedmo\Translatable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+                alias: GedmoTranslatable # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+            gedmo_translator:
+                type: annotation
+                prefix: Gedmo\Translator\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity"
+                alias: GedmoTranslator # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+            gedmo_loggable:
+                type: annotation
+                prefix: Gedmo\Loggable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+                alias: GedmoLoggable # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+            gedmo_tree:
+                type: annotation
+                prefix: Gedmo\Tree\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                alias: GedmoTree # this one is optional and will default to the name set for the mapping
+                is_bundle: false
+
+        filters:
+           softdeleteable:
+                        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                        enabled: true
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    auth_mode:  login
+    encryption: tls
+    port:  587
+    logging:  "%kernel.debug%"
+    #spool:
+    #   type: file
+    #   path: "%kernel.root_dir%/spool"
+
+stof_doctrine_extensions:
+    default_locale: en_ZA
+
+    # Only used if you activated the Uploadable extension
+    uploadable:
+        # Default file path: This is one of the three ways you can configure the path for the Uploadable extension
+        default_file_path:       %kernel.root_dir%/../web/uploads
+
+        # Mime type guesser class: Optional. By default, we provide an adapter for the one present in the HttpFoundation component of Symfony
+        mime_type_guesser_class: Stof\DoctrineExtensionsBundle\Uploadable\MimeTypeGuesserAdapter
+
+        # Default file info class implementing FileInfoInterface: Optional. By default we provide a class which is prepared to receive an UploadedFile instance.
+        default_file_info_class: Stof\DoctrineExtensionsBundle\Uploadable\UploadedFileInfo
+    orm:
+        default:
+            sluggable: true
+            timestampable: true
+            loggable: true
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:      "%rabbitmq_host%"
+            port:      5672
+            user:      "%rabbitmq_user%"
+            password:  "%rabbitmq_password%"
+            vhost:     "%rabbitmq_vhost%"
+            use_socket: false
+            lazy: true
+
+    producers:
+        monitor_stream:
+            connection: default
+            exchange_options: {name: 'MONITOR', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_monitor_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_monitor_push%"
+        aws_storage:
+            connection: default
+            exchange_options: {name: 'FILE', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_file_aws_storage_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_file_aws_storage_push%"
+
+        finger_print_audio_bucket:
+            connection: default
+            exchange_options: {name: 'FILE', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_file_finger_print_bucket_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_file_finger_bucket_print_push%"
+
+        asynchronous_process:
+            connection: default
+            exchange_options: {name: 'GENERAL', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_asynchronous_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_asynchronous_push%"
+
+
+    consumers:
+        monitor_stream_process:
+            connection: default
+            exchange_options: {name: 'MONITOR', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_monitor_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_monitor_push%"
+            callback: 'app.consumer.incoming_stream'
+            enable_logger: true
+
+        monitor_api_acrcloud_bucket_upload:
+            connection: default
+            exchange_options: {name: 'FILE', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_file_finger_print_bucket_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_file_finger_bucket_print_push%"
+            callback: 'app.consumer.incoming_acrcloud_file_upload'
+            enable_logger: true
+
+        monitor_api_aws_s3_bucket_upload:
+            connection: default
+            exchange_options: {name: 'FILE', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_file_aws_storage_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_file_aws_storage_push%"
+            callback: 'app.consumer.incoming_aws_s3_file_upload'
+            enable_logger: true
+
+        stream_processing:
+            connection: default
+            exchange_options: {name: 'STREAM', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_stream_processing_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_stream_processing_push%"
+            callback: 'app.consumer.incoming_stream_processing'
+            enable_logger: true
+
+        asynchronous_process:
+            connection: default
+            exchange_options: {name: 'GENERAL', type: direct , durable: true}
+            queue_options:
+                name: "%rabbitmq_queue_asynchronous_push%"
+                durable: true
+                routing_keys:
+                          - "%rabbitmq_routing_key_asynchronous_push%"
+            callback: 'app.consumer.async_processing'
+            enable_logger: true

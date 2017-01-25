@@ -1,0 +1,40 @@
+imports:
+    - { resource: config.yml }
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        info_logger:
+            type: rotating_file
+            path:  '%kernel.logs_dir%/%kernel.environment%.log'
+            level: info
+            max_files: 10
+        syslog_handler:
+             type: syslog
+             level: error
+        mail:
+            type:         fingers_crossed
+            # 500 errors are logged at the critical level
+            action_level: critical
+            # to also log 400 level errors (but not 404's):
+            # action_level: error
+            # excluded_404s:
+            #     - ^/
+            handler:      buffered
+        buffered:
+            type:    buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: '%from.email%'
+            #to_email:   admin@sulehosting.co.za
+            # or list of recipients
+            to_email:   [ronald.conco@mlankatech.co.za]
+            subject:    "Main App: Error Occurred!"
+            level:      debug
+

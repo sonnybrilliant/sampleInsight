@@ -1,0 +1,448 @@
+{% extends ':song:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/soundManager/css/flashblock.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/soundManager/css/360player.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/js/soundManager/css/360player-visualization.css') }}" />
+{% endblock stylesheets %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- special IE-only canvas fix -->
+    <!--[if IE]>
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/excanvas.js') }}"></script><![endif]-->
+
+    <!-- Apache-licensed animation library -->
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/berniecode-animator.js') }}"></script>
+
+    <!-- the core stuff -->
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/soundmanager2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/soundManager/script/360player.js') }}"></script>
+
+    {% if echartsData %}
+    <script src="{{ asset('assets/js/echarts-all.js') }}"></script>
+    {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-colvis-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.4.1/featherlight.min.js"></script>
+    <script src="{{ asset('assets/js/jquery.highlight.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+    <script type="text/javascript">
+
+        {% if echartsData %}
+
+        {% if statsRange == 'this-week' %}
+            {% set data_option_name = "now"|date("W")  %}
+            {% set name_period = "Week"  %}
+        {% elseif statsRange == 'last-week' %}
+            {% set data_option_name = "now"|date_modify("-1 week") |date("W")  %}
+            {% set name_period = "Week"  %}
+        {% elseif statsRange == 'current-month' %}
+            {% set data_option_name = "now"|date("F")  %}
+            {% set name_period = "Month"  %}
+        {% elseif statsRange == 'last-month' %}
+            {% set data_option_name = "now"|date_modify("-1 month") |date("F")  %}
+            {% set name_period = "Month"  %}
+        {% elseif statsRange == 'historical' %}
+            {% set data_option_name = "historical"  %}
+            {% set name_period = "historical"  %}
+        {% endif %}
+
+        var myChart = echarts.init(document.getElementById('platform_type_dates'),"macarons2");
+        myChart.setOption({
+            calculable: true,
+            timeline : {
+                show: false,
+                data : ['{{ data_option_name }}'],
+                label : {
+                    formatter : function(s) {
+                        return s.slice(0, 5);
+                    }
+                },
+                x:10,
+                y:null,
+                x2:10,
+                y2:0,
+                width:250,
+                height:50,
+                backgroundColor:"rgba(0,0,0,0)",
+                borderColor:"#eaeaea",
+                borderWidth:0,
+                padding:5,
+                controlPosition:"left",
+                autoPlay:false,
+                loop:true,
+                playInterval:2000,
+                lineStyle:{
+                    width:1,
+                    color:"#bdbdbd",
+                    type:""
+                },
+
+            },
+            options : [
+                {
+                    title : {
+                        text: '',
+                        subtext: '',
+                        //x: 'center',
+
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "Radio station: {b} <br/>{{ name_period }}: {a} <br/> Playlisted: {c} <br/> Perc: ({d}%)"
+                    },
+                    legend: {
+                        show: true,
+                        x: 'left',
+                        orient:'vertical',
+                        padding: 0,
+                        data:{{ echartsData["labels"]|json_encode| raw }}
+                    },
+                    toolbox: {
+                        show : true,
+                        color : ['#bdbdbd','#bdbdbd','#bdbdbd','#bdbdbd'],
+                        showTitle:true,
+                        feature : {
+                            mark : {show: false},
+                            dataView : {show: false, readOnly: true},
+                            magicType : {
+                                show: true,
+                                type: ['pie', 'funnel'],
+                                title: {
+                                    pie: 'Pie Chart',
+                                    funnel: 'Funnel'
+                                },
+                                option: {
+                                    funnel: {
+                                        x: '10%',
+                                        width: '80%',
+                                        funnelAlign: 'center',
+                                        max: 50
+                                    },
+                                    pie: {
+                                        roseType : 'radius',
+                                    }
+                                }
+                            },
+                            restore : {
+                                show: true,
+                                title: 'Restore'
+                            },
+                            saveAsImage : {
+                                show: true,
+                                title : 'Save As',
+                            }
+                        }
+                    },
+
+
+                    series : [
+                        {
+                            name:'{{ data_option_name }}',
+                            type:'pie',
+                            radius : [10, '60%'],
+                            roseType : 'radius',
+                            center: ['50%', '45%'],
+                            width: '50%',       // for funnel
+                            itemStyle : {
+                                normal : {
+                                    label : { show : true },
+                                    labelLine : { show : true },
+                                    borderColor:"rgba(0,0,0,0)",
+                                    borderWidth:10,
+                                },
+                                emphasis : { label : { show : false }, labelLine : {show : false} }
+                            },
+                            data:{{ echartsData["data"]|json_encode| raw }}
+                        }
+                    ]
+                }
+            ] // end options object
+
+        });
+
+        myChart.setTheme("infographic");
+        {% endif %}
+
+        soundManager.setup({
+            // path to directory containing SM2 SWF
+            url: '{{ asset('/assets/js/soundManager/') }}swf/',
+            debugMode: true
+        });
+
+        threeSixtyPlayer.config.scaleFont = (navigator.userAgent.match(/msie/i)?false:true);
+        threeSixtyPlayer.config.showHMSTime = true;
+
+        // enable some spectrum stuffs
+
+        threeSixtyPlayer.config.useWaveformData = true;
+        threeSixtyPlayer.config.useEQData = true;
+
+        // enable this in SM2 as well, as needed
+
+        if (threeSixtyPlayer.config.useWaveformData) {
+            soundManager.flash9Options.useWaveformData = true;
+        }
+        if (threeSixtyPlayer.config.useEQData) {
+            soundManager.flash9Options.useEQData = true;
+        }
+        if (threeSixtyPlayer.config.usePeakData) {
+            soundManager.flash9Options.usePeakData = true;
+        }
+
+        if (threeSixtyPlayer.config.useWaveformData || threeSixtyPlayer.flash9Options.useEQData || threeSixtyPlayer.flash9Options.usePeakData) {
+            // even if HTML5 supports MP3, prefer flash so the visualization features can be used.
+            soundManager.preferFlash = true;
+        }
+
+        // favicon is expensive CPU-wise, but can be used.
+        if (window.location.href.match(/hifi/i)) {
+            threeSixtyPlayer.config.useFavIcon = true;
+        }
+
+        if (window.location.href.match(/html5/i)) {
+            // for testing IE 9, etc.
+            soundManager.useHTML5Audio = true;
+        }
+
+    </script>
+
+{% endblock javascripts %}
+
+
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block alert %}
+                {% include "::alert.html.twig" %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-12">
+            <div class="block-flat profile-info">
+                <div class="hero-md">
+                    <div class="hero-song-image">
+                        <div class="hero-data">
+                                   <span class="hero-icon">
+                                       <img src="{{ asset('assets/images/song-page-icon.png') }}" alt="">
+                                    </span>
+                            <span class="hero-meta text-center">
+                                      <h2 class="meta-title">{{ song.title }}</h2>
+                                       <strong>Artist:</strong>&nbsp;&nbsp;{{ song.artist.title }} |
+                                       {% if song.album %}<strong>Album:</strong>&nbsp;&nbsp;{{ song.album }} | {% endif %}
+                                       <strong>Label:</strong>&nbsp;&nbsp;{{ song.recordLabel.name }}
+                                   </span>
+                        </div>
+                    </div>
+                </div>
+                {% if song.status.code == 'pending' and is_granted('ROLE_SONG_APPROVE') %}
+                <div class="cta-approve">
+                   <div class="btn-group">
+                       <a href="#" class="btn btn-danger btn-rad"><i class="fa fa-thumbs-o-down"></i>&nbsp;Reject</a>
+                       <a href="{{ path('song_approve',{slug:song.slug}) }}" alt="Approve" title="Approve" class="btn btn-success btn-rad"><i class="fa fa-thumbs-o-up"></i>&nbsp;Approve</a>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="cta-bar">
+                    <div class="ui360 ui360-vis"><a href="{{ absolute_url(asset('uploads/song/' ~ song.localFile)) }}"></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-container m-t">
+                <ul class="nav nav-tabs styled-tabs">
+                    <li><a data-toggle="tab" href="#home"><i class="fa fa-info-circle"></i>&nbsp;Information</a></li>
+                    <li {% if isDefaultView %} class="active" {% endif %}><a data-toggle="tab"  href="#transaction"><i class="fa fa-calendar"></i>&nbsp;Played At</a></li>
+                    <li {% if isDefaultView == false  %} class="active" {% endif %}><a data-toggle="tab" href="#stats"><i class="fa fa-pie-chart"></i>&nbsp;
+                            {% if statsRange == 'this-week' %}
+                                Week (#{{ "now"|date("W") }}) plays
+                            {% elseif statsRange == 'last-week' %}
+                                Last week (#{{ "now"|date_modify("-1 week") |date("W") }}) plays
+                            {% elseif statsRange == 'current-month' %}
+                                Month (#{{ "now"|date("F") }}) plays
+                            {% elseif statsRange == 'last-month' %}
+                                Last month (#{{ "now"|date_modify("-1 month") |date("F") }}) plays
+                            {% elseif statsRange == 'historical' %}
+                                Historical plays
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% if song.youTubeId %}
+                    <li><a data-toggle="tab" href="#video"><i class="fa fa-youtube"></i>&nbsp;Video</a></li>
+                    {% endif %}
+                </ul>
+                <div class="tab-content">
+                    <div id="home" class="tab-pane cont">
+                        <div class="content">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    {#<audio id="demo" src="{{ asset('uploads/song/' ~ song.localFile) }}"></audio>#}
+                                    <div class="page-header">
+                                        <h3>{{ song.title }}</h3>
+                                    </div>
+                                    <div class="content">
+                                        <table class="no-border no-strip skills">
+                                            <tbody class="no-border-x no-border-y">
+
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Artist</strong></td>
+                                                    <td><a href="{{ path('artist_profile',{slug:song.artist.slug}) }}">{{ song.artist.title }}</a> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Record label</strong></td>
+                                                    <td><a href="{{ path('record_label_profile',{slug:song.recordLabel.slug}) }}">{{ song.recordLabel.name }}</a> </td>
+                                                </tr>
+                                                {% if song.royaltyAgency %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Royalty agency</strong></td>
+                                                        <td><a href="{{ path('royalty_agency_profile',{slug:song.royaltyAgency.name}) }}">{{ song.royaltyAgency.name }}</a> </td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>Status</strong></td>
+                                                    <td>
+                                                        {% if song.status.code == 'active' %}
+                                                            <span class="label label-primary">{{ song.status.title }}</span>
+                                                        {% else %}
+                                                            <span class="label label-default">{{ song.status.title }}</span>
+                                                        {% endif %}
+
+                                                    </td>
+                                                </tr>
+                                                {% if song.isrc %}
+                                                <tr>
+                                                    <td style="width:40%;"><strong>ISRC Code</strong></td>
+                                                    <td>{{ song.isrc }}</td>
+                                                </tr>
+                                                {% endif %}
+                                                {% if song.upc %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>UPC Code</strong></td>
+                                                        <td>{{ song.upc }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if song.album %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Album</strong></td>
+                                                        <td>{{ song.album }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if song.featuredArtist %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Featured artist</strong></td>
+                                                        <td>{{ song.featuredArtist }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if song.genres %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Genre</strong></td>
+                                                        <td>
+                                                            {% for genre in song.genres %}
+                                                                {{ genre.title }}
+                                                                {% if song.genres|length > 1 %}
+                                                                    {% if loop.index0 < (song.genres|length - 1)  %}
+                                                                        ,
+                                                                    {% endif %}
+                                                                {% endif %}
+
+                                                            {% endfor %}
+
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if song.targetedRadioStations %}
+                                                    <tr>
+                                                        <td style="width:40%;"><strong>Target radio stations</strong></td>
+                                                        <td>
+                                                            {% for radioStation in song.targetedRadioStations %}
+                                                                {{ radioStation.name }}
+                                                                {% if song.targetedRadioStations|length > 1 %}
+                                                                    {% if loop.index0 < (song.targetedRadioStations|length - 1)  %}
+                                                                        ,
+                                                                    {% endif %}
+                                                                {% endif %}
+
+                                                            {% endfor %}
+
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="transaction" class="tab-pane {% if isDefaultView %} active {% endif %} cont">
+                        <h3>Transaction logs <i class="fa fa-info-circle-circle" data-placement="right" data-toggle="tooltip" data-original-title="These are the transaction logs of the song monitored whilst playing on radio."></i></h3>
+                        <small>Total: {{ totalPlays }} </small>
+                        <br /><br />
+                        {{ datatable_render(songDatatable) }}
+                    </div>
+                    <div id="stats" class="tab-pane {% if isDefaultView == false  %} active {% endif %} cont">
+                        {% if statsRange == 'this-week' %}
+                            <h3>Radio station plays week (#{{ "now"|date("W") }})</h3>
+                        {% elseif statsRange == 'last-week' %}
+                            <h3>Radio station plays last week (#{{ "now"|date_modify("-1 week") |date("W") }})</h3>
+                        {% elseif statsRange == 'current-month' %}
+                            <h3>Radio station plays current month (#{{ "now"|date("F") }})</h3>
+                        {% elseif statsRange == 'last-month' %}
+                            <h3>Radio station plays last month (#{{ "now"|date_modify("-1 month") |date("F") }})</h3>
+                        {% elseif statsRange == 'historical' %}
+                            <h3>Radio station plays Historical</h3>
+                        {% endif %}
+                        <small>Total: {{ totalPlaysBy }} </small>
+
+                        <div class="btn-group pull-right">
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle" aria-expanded="false">More stats.. <span class="caret"></span></button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="{{ path('song_profile',{slug:song.slug,range:'this-week'}) }}">Current week</a></li>
+                                <li><a href="{{ path('song_profile',{slug:song.slug,range:'last-week'}) }}">Last week</a></li>
+                                <li><a href="{{ path('song_profile',{slug:song.slug,range:'current-month'}) }}">Current month</a></li>
+                                <li><a href="{{ path('song_profile',{slug:song.slug,range:'last-month'}) }}">Last month</a></li>
+                                <li><a href="{{ path('song_profile',{slug:song.slug,range:'historical'}) }}">Historical</a></li>
+                            </ul>
+                        </div>
+                        <br /><br />
+                        {% if echartsData %}
+                            <div id="platform_type_dates" style="height: 600px;width:800px"></div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button><i class="fa fa-warning sign"></i><strong>A!</strong> No data available.
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    {% if song.youTubeId %}
+                    <div id="video" class="tab-pane cont">
+                        <h3>Youtube video</h3>
+                        <br />
+                        <iframe width="520" height="395"
+                                src="https://www.youtube.com/embed/{{ song.youTubeId }}">
+                        </iframe>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
+

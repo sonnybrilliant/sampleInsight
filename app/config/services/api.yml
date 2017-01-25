@@ -1,0 +1,17 @@
+services:
+  app.core.acrcloud.upload.audio:
+      class: AppBundle\Service\Core\Acrcloud\AcrcloudUploadAudioService
+      arguments: ['@logger','%api_acrcloud_api_url%','%api_acrcloud_key%','%api_acrcloud_secret%','%api_acrcloud_bucket_slogan%','%api_acrcloud_bucket_advert%','%api_acrcloud_bucket_promo%']
+
+  app.core.aws.upload.audio:
+      class: AppBundle\Service\Core\Aws\AwsUploadAudioService
+      arguments: ['@logger','%api_aws_key%','%api_aws_secret%','%api_aws_s3_bucket_slogan%','%api_aws_s3_bucket_advert%','%api_aws_s3_bucket_promo%','%api_aws_s3_bucket_archive%']
+
+  app.core.api.apostle:
+      class: AppBundle\Service\Core\Apostle\ApostleRestFulClientService
+      arguments: ['@logger','%api_apostle_url%']
+
+  app.core.api.deezer:
+      class: AppBundle\Service\Core\Deezer\DeezerLookUpService
+      arguments: ['@logger','%api_deezer_url%',]
+

@@ -1,0 +1,23 @@
+{% if is_granted('ROLE_ADVERT_VIEW') %}
+    <li>
+        <a href="#"><i class="fa fa-building"></i><span>Advertising Corp.</span></a>
+        <ul class="sub-menu" {% if action == 'advertising_organization_add' or action == 'advertising_organization_list' %} style="display: block;"{% endif %}>
+            {% if is_granted('ROLE_ADVERT_EDIT') %}
+                <li {% if action == 'advertising_organization_add' %}class="active" {% endif %}><a href="{{ path('advertising_organization_add') }}"><i class="fa fa-plus-circle"></i><span>Add advert organization</span></a></li>
+            {% endif %}
+
+            {% if is_granted('ROLE_ADVERT_VIEW') %}
+                <li {% if action == 'advertising_organization_list' %} class="active" {% endif %}><a href="{{ path('advertising_organization_list') }}"><i class="fa fa-list"></i><span>List advert organization</span></a></li>
+            {% endif %}
+
+            {% if action == 'advertising_organization_edit' %}
+                <li class="active"><a href="{{ path('advertising_organization_edit',{slug:advertisingOrganization.slug}) }}"><i class="fa fa-edit"></i><span>Edit</span></a></li>
+            {% endif %}
+
+            {% if action == 'advertising_organization_profile' %}
+                <li class="active"><a href="{{ path('advertising_organization_profile',{slug:advertisingOrganization.slug}) }}"><i class="fa fa-eye"></i><span>Organization profile</span></a></li>
+            {% endif %}
+
+        </ul>
+    </li>
+{% endif %}

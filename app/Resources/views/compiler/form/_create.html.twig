@@ -1,0 +1,49 @@
+<form class="form-horizontal group-border-dashed" action="{{ path('compiler_add') }}" data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        <fieldset>
+            <legend><i class="fa fa-volume-up"></i>&nbsp Radio station</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.radioStation) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-user"></i>&nbsp;User details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.firstName) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.lastName) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.gender) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-phone"></i>&nbsp Contact details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.email) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.msisdn) }}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="text-center">
+            <button class="btn btn-danger btn-lg" type="submit" tabindex="11"><i class="fa fa-save"></i> Add</button>
+            <a href="{{ path('song_list') }}" class="btn btn-default" tabindex="12" title="Cancel" alt="Cancel">Cancel</a>
+        </div>
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

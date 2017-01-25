@@ -1,0 +1,31 @@
+{% extends ':record_label:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% include '::alert.html.twig'%}
+            <div class="block-flat">
+                <div class="content">
+                    {% include "record_label/form/_create.html.twig" %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/js/jquery.icheck/skins/all.css') }}" rel="stylesheet"/>
+{% endblock stylesheets %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/jquery.select2/select2.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/jquery.icheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.parsley/dist/parsley.min.js') }}"></script>
+
+{% endblock javascripts %}

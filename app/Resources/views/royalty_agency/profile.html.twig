@@ -1,0 +1,83 @@
+{% extends ':royalty_agency:layout.html.twig' %}
+
+{% block title %}{{ page_header }}{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block alert %}
+                {% include "::alert.html.twig" %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-12">
+            <div class="block-flat profile-info">
+
+                <div class="hero-md">
+                    <div class="hero-label-image">
+                        <div class="hero-data">
+                                   <span class="hero-icon">
+                                       <img src="{{ asset('assets/images/record-label-icon.png') }}" alt="">
+                                    </span>
+                            <span class="hero-meta text-center">
+                                      <h2 class="meta-title">{{ royaltyAgency.name }}</h2>
+                                       <strong>Registered As:</strong>&nbsp;&nbsp;{{ royaltyAgency.name }}
+                                | <strong>Contact:</strong>&nbsp;&nbsp;{{ royaltyAgency.email }}
+                                | <strong>Website:</strong>&nbsp;&nbsp;{{ royaltyAgency.website }}
+                                   </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-container m-t">
+                <ul class="nav nav-tabs styled-tabs">
+                    <li class="active"><a data-toggle="tab" href="#home"><i class="fa fa-info-circle"></i>&nbsp;Information</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="home" class="tab-pane active cont">
+                        <div class="content">
+                            <div id="accordion2" class="panel-group accordion accordion-color">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2" href="#collapse-1" aria-expanded="false"><i class="fa fa-angle-right"></i> About {{ royaltyAgency.name }}</a></h4>
+                                    </div>
+                                    <div id="collapse-1" class="panel-collapse collapse in" aria-expanded="false" >
+                                        <div class="panel-body">
+                                            {{ royaltyAgency.bio }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion2" href="#collapse-2" class="collapsed" aria-expanded="false"><i class="fa fa-angle-right"></i> Contact details</a></h4>
+                                    </div>
+                                    <div id="collapse-2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="panel-body">
+                                            <div class="list-group">
+                                                <a href="#" class="list-group-item">
+                                                    <div><i class="fa fa-phone"></i>{{ royaltyAgency.contactNumber }}</div>
+                                                    <div><i class="fa fa-envelope"></i> {{ royaltyAgency.email }}</div>
+                                                    <div><i class="fa fa-link"></i> {{ royaltyAgency.website }}</div>
+                                                    {% if royaltyAgency.facebook %}
+                                                        <div><i class="fa fa-facebook"></i> {{ royaltyAgency.facebook }}</div>
+                                                    {% endif %}
+                                                    {% if royaltyAgency.twitter %}
+                                                        <div><i class="fa fa-twitter"></i> {{ royaltyAgency.twitter }}</div>
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+

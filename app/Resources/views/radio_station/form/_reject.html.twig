@@ -1,0 +1,18 @@
+<form class="form-horizontal group-border-dashed" action="{{ path('radio_station_incoming_reject',{id:radioStationQueue.id}) }}" data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        {{ form_widget(form.message) }}
+        {{ form_errors(form.message) }}
+
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <br />
+        <div class="text-center">
+            <button class="btn btn-danger btn-lg" type="submit" tabindex="11"><i class="fa fa-save"></i> Submit</button>
+            <a href="{{ path('radio_station_incoming_list') }}" class="btn btn-default" tabindex="12" title="Cancel" alt="Cancel">Cancel</a>
+        </div>
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

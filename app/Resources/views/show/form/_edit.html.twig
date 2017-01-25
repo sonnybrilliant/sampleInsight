@@ -1,0 +1,93 @@
+<form class="form-horizontal group-border-dashed" action="{{ path('radio_show_edit',{slug:radioShow.slug}) }}" data-parsley-validate style="border-radius: 0px;"  autocomplete="off" {% if app.debug %}  novalidate="true"{% endif %}  method="POST" enctype="multipart/form-data">
+    <div class="col-sm-12 col-md-12">
+        <fieldset>
+            <legend><i class="fa fa-microphone"></i>&nbsp;Details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.radioShowType) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.radioStation) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.isCrossOver) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-comment"></i>&nbsp;About show</legend>
+            <div class="row">
+                <div class="col-sm-12">
+                    {{ form_widget(form.description) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-clock-o"></i>&nbsp;Show times</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.startTime) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.endTime) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-calendar"></i>&nbsp;Show slots</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.playsMonday) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.playsTuesday) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.playsWednesday) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.playsThursday) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.playsFriday) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.playsSaturday) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.playsSunday) }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend><i class="fa fa-calendar-o"></i>&nbsp;Schedule Type</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.radioShowScheduleType) }}
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="text-center">
+            <button class="btn btn-danger btn-lg" type="submit" tabindex="11"><i class="fa fa-save"></i> Update</button>
+            <a href="{{ path('radio_show_list') }}" class="btn btn-default" tabindex="12" title="Cancel" alt="Cancel">Cancel</a>
+        </div>
+    </div>
+    <div class="form-group"></div>
+    {{ form_rest(form) }}
+</form>
+
+

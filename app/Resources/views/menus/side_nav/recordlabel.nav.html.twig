@@ -1,0 +1,25 @@
+{% if is_granted('ROLE_RECORD_LABEL_VIEW') %}
+<li>
+    <a href="#"><i class="fa fa-building-o"></i><span>Record labels</span></a>
+    <ul class="sub-menu">
+        {% if is_granted('ROLE_RECORD_LABEL_EDIT') %}
+        <li {% if action == 'record_label_add' %}class="active" {% endif %}><a href="{{ path('record_label_create') }}"><i class="fa fa-plus-circle"></i><span>Add record label</span></a></li>
+        {% endif %}
+
+        {% if is_granted('ROLE_RECORD_LABEL_VIEW') %}
+        <li {% if action == 'record_label_list' %}class="active" {% endif %}><a href="{{ path('record_label_list') }}"><i class="fa fa fa-list"></i><span>list record label</span></a></li>
+        {% endif %}
+
+        {% if action == 'record_label_profile' %}
+        <li class="active"><a href="{{ path('record_label_profile',{slug:recordLabel.slug}) }}"><i class="fa fa-eye"></i><span>Profile</span></a></li>
+        {% endif %}
+
+        {% if action == 'record_label_edit' %}
+            <li class="active"><a href="{{ path('record_label_edit',{slug:recordLabel.slug}) }}"><i class="fa fa-edit"></i><span>Edit</span></a></li>
+        {% endif %}
+
+    </ul>
+</li>
+{% endif %}
+
+

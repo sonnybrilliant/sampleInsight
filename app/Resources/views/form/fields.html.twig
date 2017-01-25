@@ -1,0 +1,82 @@
+{% extends 'form_div_layout.html.twig' %}
+
+
+{% block form_row %}
+    {% spaceless %}
+        <!-- Group -->
+        <div class="form-group {% if errors|length > 0 %}has-error{% endif %}">
+            {{ form_label(form) }}
+            {% set timepicker = ''%}
+            {% if time_icon is defined %}
+                {% if time_icon is not null %}
+                    {% set timepicker = 'bootstrap-timepicker'%}
+                {% endif %}
+            {% endif %}
+
+            {% set size_class = '' %}
+            {% if override_col_size is defined %}
+                {% if override_col_size is not null %}
+                    {% set size_class = override_col_size %}
+                {% endif %}
+            {% endif %}
+
+            <div class="{% if size_class != '' %}{{ size_class }}{% else %}col-md-7{%endif%} controls  input-group {{ timepicker }}">
+                {{ form_widget(form, { 'attr' : attr|default({}) }) }}
+                {% if help is defined %}
+                    {% if help is not null %}
+                        <span class="input-group-addon" data-toggle="tooltip" data-container="body" data-placement="top" title="{{help}}"><i class="fa fa-question-circle"></i></span>
+                    {% endif %}
+                {% endif %}
+                {% if helpCheck is defined %}
+                    {% if helpCheck is not null %}
+                        <span data-toggle="tooltip" data-container="body" data-placement="top" title="{{helpCheck}}"><i class="fa fa-question-circle"></i></span>
+                    {% endif %}
+                {% endif %}
+                {% if date_icon is defined %}
+                    {% if date_icon is not null %}
+                        <span class="input-group-addon" data-toggle="tooltip" data-container="body" data-placement="top" title="{{date_icon}}"><i class="fa fa-th"></i></span>
+                    {% endif %}
+                {% endif %}
+                {% if time_icon is defined %}
+                    {% if time_icon is not null %}
+                        <span class="input-group-addon" data-toggle="tooltip" data-container="body" data-placement="top" title="{{time_icon}}"><i class="fa fa-clock-o"></i></span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% if parsley_error_container is defined %}
+            <div class="col-md-7 col-md-offset-5 validation-message">
+                <span id="{{parsley_error_container}}"></span>
+            </div>
+            {% endif %}
+
+            {{ form_errors(form) }}
+        </div>
+        <!-- // Group END -->
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block form_label %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id,'class': (label_attr.class|default(''))|trim}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-sm-5 control-label') ~ ' required')|trim}) %}
+    {% else %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-sm-5 control-label') ~ ' ')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+{% endblock form_label %}
+
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                <p class="has-error help-block pull-right">{{ error.message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}

@@ -1,0 +1,26 @@
+services:
+  #Consumers
+  # - Song
+  app.consumer.incoming_stream:
+      class: AppBundle\Consumer\Stream\IncomingStreamConsumer
+      arguments: ['@logger','@app.service.radio_station_stream','@app.service.radio_station','@app.service.song','@app.service.advert','@app.service.advertising_organization','@app.service.slogan','@app.service.promo','@event_dispatcher','@app.core.content_type_service']
+
+  # - ACRCLoud Api File Upload
+  app.consumer.incoming_acrcloud_file_upload:
+      class: AppBundle\Consumer\Audio\UploadFileFingerPrintBucketConsumer
+      arguments: ['@logger','@app.core.status_service','@app.service.slogan','@app.service.advert','@app.service.promo','@app.core.acrcloud.upload.audio','@app.core.api.apostle']
+
+  # - AWS S3 Api File Upload
+  app.consumer.incoming_aws_s3_file_upload:
+      class: AppBundle\Consumer\Audio\UploadFileAWSS3BucketConsumer
+      arguments: ['@logger','@app.core.status_service','@app.service.slogan','@app.service.advert','@app.service.promo','@app.service.archive','@app.core.aws.upload.audio','@app.core.api.apostle']
+
+  # - Create Recordlabel, Artist , Song
+  app.consumer.incoming_stream_processing:
+      class: AppBundle\Consumer\Stream\StreamProcessingConsumer
+      arguments: ['@logger','@app.service.radio_station_stream','@app.service.record_label','@app.service.artist','@app.service.radio_show','@app.core.api.apostle']
+
+ # - Create Recordlabel, Artist , Song
+  app.consumer.async_processing:
+      class: AppBundle\Consumer\General\AsyncConsumer
+      arguments: ['@logger','@app.service.radio_show']

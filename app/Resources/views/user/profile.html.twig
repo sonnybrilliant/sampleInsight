@@ -1,0 +1,80 @@
+{% extends ":user:layout.html.twig" %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="profile-info clearfix">
+            <div class="col-md-12">
+                {% block alert %}
+                    {% include "::alert.html.twig" %}
+                {% endblock %}
+            </div>
+            <div class="col-sm-2">
+                <div class="avatar">
+                    {% set path = '../../assets/images/avatar.png' %}
+                    <img src="{{ asset(''~ path ~'') }}" width="130px" class="profile-avatar">
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="personal">
+                    <h1 class="name">{{ user.fullName }}</h1>
+                    {% if user.isRadioStationCompiler or user.isRadioStationAdmin %}
+                    <h5>{{ user.userGroup.title }} at <i>{{ user.radioStation.name }}</i></h5>
+                    {% else %}
+                    <h5>{{ user.userGroup.title }}</h5>
+                    {% endif %}
+                        <p>
+                        {% if user.status.code == 'active' %}
+                            <span class="label label-primary">{{ user.status.title }}</span>
+                        {% else %}
+                            <span class="label label-danger">{{ user.status.title }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="button-block">
+                    {% if account == 'operator' %}
+                        <a class="btn btn-primary"
+                           href="" title="Update my details"><i class="fa fa-pencil"></i>Update my details</a>
+                    {% elseif account == 'agent'  %}
+                        <a class="btn btn-primary"
+                           href="" title="Update my details"><i class="fa fa-pencil"></i>Update my details</a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% if app.user.id != user.id %}
+                            {% if user.status.code == 1 %}
+                                {% if account == 'admin' %}
+                                    <a class="btn btn-danger"
+                                       href="" title="Suspend account"><i class="fa fa-lock"></i>Suspend Account</a>
+                                {% elseif account == 'operator'  %}
+                                    <a class="btn btn-danger"
+                                       href="" title="Suspend account"><i class="fa fa-lock"></i>Suspend Account</a>
+                                {% elseif account == 'agent'  %}
+                                    <a class="btn btn-danger"
+                                       href="" title="Suspend account"><i class="fa fa-lock"></i>Suspend Account</a>
+                                {% endif %}
+                            {% else %}
+                                {% if account == 'admin' %}
+                                    <a class="btn btn-success"
+                                       href="" title="Activate account"><i class="fa fa-unlock"></i>Activate Account</a>
+                                {% elseif account == 'operator'  %}
+                                    <a class="btn btn-success"
+                                       href="" title="Activate account"><i class="fa fa-unlock"></i>Activate Account</a>
+                                {% elseif account == 'agent'  %}
+                                    <a class="btn btn-success"
+                                       href="" title="Activate account"><i class="fa fa-unlock"></i>Activate Account</a
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% include ":user/form:profile.html.twig" %}
+    </div>
+{% endblock body %}
