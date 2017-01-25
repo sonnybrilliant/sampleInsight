@@ -74,22 +74,6 @@ class AcrcloudAudioUploadCommand extends ContainerAwareCommand
         );
 
         $this->acrcloudUploadAudioService->uploadSlogan($arrParam);
-
-
-
-
-        /**
-         * Find song by ISRC
-         */
-//        $song = $this->songService->getByISRC($isrc);
-//
-//        if(!$song){
-//            $output->writeln(sprintf('[ERROR] Song was not found with ISRC: %s', $isrc));
-//        }else{
-//            $count = $this->radioStationStreamService->updateStreamsWithSongDetails($song);
-//            $output->writeln(sprintf('[OK] %s records were updated for : %s',$count , $isrc));
-//        }
-
     }
 
 }

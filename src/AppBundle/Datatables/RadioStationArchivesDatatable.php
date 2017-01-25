@@ -62,14 +62,6 @@ class RadioStationArchivesDatatable extends AbstractDatatableView
 
             $line['radioShow']['title'] = $this->truncate($line['radioShow']['title'], FileUtil::LENGTH);
 
-            //$route = $this->router->generate('promo_profile', array('slug' => $line['slug']));
-            //$line['title'] = '<a href="' . $route . '" alt="'.$line['title'].'" title="'.$line['title'].'">' . ucfirst($this->truncate($line['title'],FileUtil::LENGTH)) . '</a>';
-
-
-//            $routeRadioStation = $this->router->generate('radio_station_profile', array('slug' => $line['radioStation']['slug']));
-//            $line['radioStation']['name'] = '<a href="' . $routeRadioStation . '" alt="'.$line['radioStation']['name'].'" title="'.$line['radioStation']['name'].'">' . ucfirst($line['radioStation']['name']) . '</a>';
-
-
             return $line;
         };
 

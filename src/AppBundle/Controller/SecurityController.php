@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Form\Security\LoginForm;
+use AppBundle\Form\Type\LoginForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 class SecurityController extends Controller
@@ -27,7 +27,6 @@ class SecurityController extends Controller
             '_username' => $lastUsername,
         ]);
 
-        //dump($error);die;
         return $this->render(
             'security/login.html.twig',
             array(

@@ -210,10 +210,6 @@ class RadioStationQueueDatatable extends AbstractDatatableView
                             'role' => 'button'
                         ),
                         'render_if' => function($row) {
-                            // caution the line $row['createdBy']['username'] is already formatted in the lineFormatter
-                            //if ($row['createdBy']['id'] == $this->getUser()->getId() or true === $this->isAdmin()) {
-                            //    return true;
-                            //};
                             if($this->isAllowedToApprove($row['radioStation']['id'],$row['isApproved'],$row['isRejected'])){
                                 return true;
                             }

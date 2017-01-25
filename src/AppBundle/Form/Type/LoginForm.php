@@ -9,7 +9,7 @@
  *
  * Created At: 2016/09/30
  */
-namespace AppBundle\Form\Security;
+namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;

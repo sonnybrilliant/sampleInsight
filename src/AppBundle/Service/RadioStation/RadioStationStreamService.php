@@ -147,11 +147,11 @@ class RadioStationStreamService
     public function processEchartsDataForTopArtist($arrData)
     {
         $arrFinal = array();
-
-        if(sizeof($arrData) > 0){
+        $arrSize =  sizeof($arrData);
+        if($arrSize > 0){
             $arrNew = [];
             $arrTmp = [];
-            for($x = 0; $x < sizeof($arrData) ; $x++){
+            for($x = 0; $x < $arrSize ; $x++){
                 if(!in_array($arrData[$x]['artist'],$arrTmp)){
                     $arrNew[] = array(
                         'value' => $arrData[$x]['played'],
@@ -319,10 +319,11 @@ class RadioStationStreamService
     public function processEchartsDataForSongTopRadioStationPlays($arrData)
     {
         $arrFinal = array();
-        if(sizeof($arrData) > 0){
+        $arrSize = sizeof($arrData);
+        if($arrSize > 0){
             $arrNew = [];
             $arrTmp = [];
-            for($x = 0; $x < count($arrData) ; $x++){
+            for($x = 0; $x < $arrSize ; $x++){
                 if(!in_array($arrData[$x]['name'],$arrTmp)){
                     $arrNew[] = array(
                         'value' => $arrData[$x]['played'],

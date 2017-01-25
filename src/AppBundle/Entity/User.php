@@ -304,7 +304,8 @@ class User implements AdvancedUserInterface
     {
        $array = [];
        $tmp = $this->userRoles->toArray();
-       for($x = 0; $x < count($tmp); $x++){
+        $arrSize = $tmp ;
+       for($x = 0; $x < $arrSize; $x++){
            $array[] = $tmp[$x]->getRole();
        }
 

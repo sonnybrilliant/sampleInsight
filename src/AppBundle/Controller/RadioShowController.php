@@ -151,15 +151,11 @@ class RadioShowController extends Controller
      */
     public function profileAction(Request $request,RadioShow $radioShow)
     {
-        //$advertDatatable = $this->get('app.datatable.advert_stream');
-        //$advertDatatable->buildDatatable();
-
         return $this->render('show/profile.html.twig', array(
             'radioShow' => $radioShow,
             'page_header' => $radioShow->getTitle()."'s profile",
             'breadcrumb' => 'Profile',
             'action' => 'radio_show_profile',
-            //'advertDatatable' => $advertDatatable,
         ));
     }
 

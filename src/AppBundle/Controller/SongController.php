@@ -155,7 +155,7 @@ class SongController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function forwardToProfile(Request $request,Song $song)
+    public function forwardToProfileAction(Request $request,Song $song)
     {
         return $this->redirectToRoute('song_profile',array(
             'slug' => $song->getSlug()
@@ -225,38 +225,10 @@ class SongController extends Controller
 
             $this->get('app.handler_api.radio_station_incoming_queue_create_handler')->add($song);
         }catch(\Exception $e){
-            die($e->getMessage());
             $this->get('logger')->error('Failed to add song to RadioStationQueue:'.$song->getId());
             $this->get("app.alert.service")->setError("An error occurred whilst adding approving song, please contact admin.");
         }
 
         return $this->redirect($this->generateUrl('song_profile',array('slug' =>$song->getSlug())));
-    }
-
-    /**
-     * @Route("/secured/song/edit/{slug}" , name="song_edit" , options={"expose"=true})
-     * @ParamConverter("artist", class="AppBundle\Entity\Artist")
-     * @Method({"GET", "POST"})
-     * @param Request $request
-     * @return Response
-     */
-    public function editAction(Request $request,Artist $artist)
-    {
-//        $service = $this->get("app.handler_form.artist_edit");
-//        $form = $this->createForm(ArtistEditType::class,$artist);
-//
-//        $form->handleRequest($request);
-//
-//        if($service->handle($form)){
-//            return $this->redirectToRoute('artist_profile',array('slug'=>$artist->getSlug()));
-//        }
-//
-//        return $this->render('artist/edit.html.twig', array(
-//            'form' => $form->createView(),
-//            'page_header' => 'Edit '.$artist->getTitle()."'s profile",
-//            'breadcrumb' => 'Edit',
-//            'action' => 'artist_edit',
-//            'artist' => $artist
-//        ));
     }
 }

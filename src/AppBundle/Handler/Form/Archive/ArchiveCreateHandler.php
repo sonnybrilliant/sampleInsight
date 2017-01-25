@@ -139,7 +139,7 @@ class ArchiveCreateHandler
                     $archive->setLocalFile(basename($file));
                     $archive->setRealFilePath($folderName . '/' . basename($file));
                     $archive->setTitle(basename($file));
-                    //$this->archiveService->create($archive);
+                    $this->archiveService->create($archive);
 
                     $response = $this->apostleClient->queueFileUpload(
                         ContentType::ARCHIVE,
@@ -200,8 +200,6 @@ class ArchiveCreateHandler
 
 
         if (count($results) == 1) {
-            echo("===================");
-            var_dump($results[0]->getId());
             return $results[0];
         } elseif (count($results) > 1) {
             /**
@@ -229,8 +227,6 @@ class ArchiveCreateHandler
                 }
 
                 if (($currentDate >= $checkStartDate) && ($currentDate <= $checkEndDate)) {
-                    echo("+++++++++");
-                    var_dump($show->getId());
                     return $show;
                 }
             }

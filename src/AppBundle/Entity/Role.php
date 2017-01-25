@@ -134,35 +134,4 @@ class Role implements RoleInterface
     {
         $this->updatedAt = $updatedAt;
     }
-
-//    /**
-//     * Add users.
-//     *
-//     * @param User $users
-//     *
-//     * @return Role
-//     */
-//    public function addUser(User $users)
-//    {
-//        $this->users[] = $users;
-//        return $this;
-//    }
-//    /**
-//     * Remove users.
-//     *
-//     * @param User $users
-//     */
-//    public function removeUser(User $users)
-//    {
-//        $this->users->removeElement($users);
-//    }
-//    /**
-//     * Get users.
-//     *
-//     * @return \Doctrine\Common\Collections\Collection
-//     */
-//    public function getUsers()
-//    {
-//        return $this->users;
-//    }
 }

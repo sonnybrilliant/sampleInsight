@@ -194,7 +194,8 @@ class ArtistService
                         if(is_array($objData->metadata["music"][0]["genres"])){
                             $genres = $objData->metadata["music"][0]["genres"];
                             $toAddGenres = new ArrayCollection();
-                            for($x = 0; $x < count($genres); $x++){
+                            $arrSize = count($genres);
+                            for($x = 0; $x < $arrSize; $x++){
                                 $genre = $this->genreService->searchForGenreOrCreate($genres[$x]['name']);
                                 if($genre){
                                     $toAddGenres->add($genre);

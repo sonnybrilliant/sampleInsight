@@ -132,7 +132,7 @@ class RadioStationController extends Controller
      * @Method("GET")
      * @return Response
      */
-    public function IncomingQueueAction(Request $request)
+    public function incomingQueueAction(Request $request)
     {
         $datatable = $this->get('app.datatable.radio_station_incoming');
         $datatable->buildDatatable();
@@ -150,7 +150,7 @@ class RadioStationController extends Controller
      * @Route("/secured/radio/station/incoming/queue/list/results" , name="radio_station_incoming_list_results")
      * @return Response
      */
-    public function IncomingQueueListResultsAction()
+    public function incomingQueueListResultsAction()
     {
         $datatable = $this->get('app.datatable.radio_station_incoming');
         $datatable->buildDatatable();
@@ -176,7 +176,7 @@ class RadioStationController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function IncomingQueueApproveAction(Request $request, RadioStationQueue $radioStationQueue)
+    public function incomingQueueApproveAction(Request $request, RadioStationQueue $radioStationQueue)
     {
         $radioStationQueue->setApprovedBy($this->getUser());
         $radioStationQueue->setApprovedAt(new \DateTime());
@@ -198,7 +198,7 @@ class RadioStationController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function IncomingQueueRejectAction(Request $request, RadioStationQueue $radioStationQueue)
+    public function incomingQueueRejectAction(Request $request, RadioStationQueue $radioStationQueue)
     {
 
         $this->denyAccessUnlessGranted(new Expression(
@@ -252,7 +252,7 @@ class RadioStationController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function IncomingQueueViewAction(Request $request, RadioStationQueue $radioStationQueue)
+    public function incomingQueueViewAction(Request $request, RadioStationQueue $radioStationQueue)
     {
 
         $form = $this->createForm(RadioStationSongRejectViewType::class,$radioStationQueue);

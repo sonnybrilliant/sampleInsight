@@ -51,14 +51,14 @@ class RadioShowTimeSlotCreateHandler
         $this->radioShowTimeSlotService = $radioShowTimeSlotService;
     }
 
-
     /**
      * Create Radio Show Time Slots
+     *
      * @param RadioShow $radioShow
-     * @param $payload
+     * @param \stdClass $payload
      * @throws \Exception
      */
-    public function handle(RadioShow $radioShow,$payload)
+    public function handle(RadioShow $radioShow,\stdClass $payload)
     {
         $this->logger->info(FileUtil::getClassName(get_class()) . ":  create radio show time slot ");
 

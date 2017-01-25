@@ -145,9 +145,9 @@ class RadioShowService
     /**
      * Create Radio show time slot Asynchronously
      *
-     * @param $payload
+     * @param \stdClass $payload
      */
-    public function processRequestCreateTimeSlot($payload)
+    public function processRequestCreateTimeSlot(\stdClass $payload)
     {
         $this->logger->info(FileUtil::getClassName(get_class()) . ": process request from queue create time slot for showId:".$payload->entityId);
 

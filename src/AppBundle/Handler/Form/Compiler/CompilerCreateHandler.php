@@ -100,7 +100,6 @@ class CompilerCreateHandler
             );
 
         }catch (\Exception $e){
-            die($e->getMessage());
             $this->alertService->setError("Oops something went wrong whilst adding artist, please contact admin.");
             $this->logger->error($e->getMessage());
             return false;

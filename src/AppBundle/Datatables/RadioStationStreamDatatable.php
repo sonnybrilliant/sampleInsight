@@ -78,9 +78,6 @@ class RadioStationStreamDatatable extends AbstractDatatableView
             $routeRadioStation = $this->router->generate('radio_station_profile', array('slug' => $line['radioStation']['slug']));
             $line['radioStation']['name'] = '<a href="' . $routeRadioStation . '" alt="View radio station profile" title="View radio station profile">' . ucfirst($line['radioStation']['name']) . '</a>';
 
-//                $routeRadioStationStream = $this->router->generate('monitor_profile', array('id' => $line['id']));
-//                $line['id']= '<a href="'.$routeRadioStationStream.'" alt="View details" title="View details">'.ucfirst($line['id']).'</a>';
-
             return $line;
         };
 
